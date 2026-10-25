@@ -1,4 +1,5 @@
 import { detectEmergency, detectFrustration, detectService } from "@/lib/assistant/detect";
+import { assistantIsLive } from "@/lib/assistant/live";
 import type { ServiceType } from "@/lib/domain/types";
 
 export type AssistantDecision = {
@@ -20,7 +21,7 @@ export type AssistantContext = {
 };
 
 export function openAiConfigured(): boolean {
-  return Boolean(process.env.OPENAI_API_KEY);
+  return assistantIsLive();
 }
 
 export async function completeWithAssistant(

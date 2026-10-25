@@ -1,3 +1,4 @@
+import { assistantIsLive } from "@/lib/assistant/live";
 import { googleCredentialsPresent } from "@/lib/booking/google-provider";
 
 export type ModeLabel = "live" | "sandbox" | "refused";
@@ -30,7 +31,7 @@ export function integrationStatus(): IntegrationStatus {
   return {
     supabase: supabaseConfigured() && (process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY) ? "live" : "sandbox",
     twilio: process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN ? "live" : "sandbox",
-    assistant: process.env.OPENAI_API_KEY ? "live" : "sandbox",
+    assistant: assistantIsLive() ? "live" : "sandbox",
     google: googleCredentialsPresent() ? "live" : "sandbox",
     email: process.env.RESEND_API_KEY && process.env.EMAIL_FROM ? "live" : "sandbox",
     stripe,
