@@ -1,0 +1,9 @@
+# Local Supabase CLI config. This repo is not linked to a hosted project.
+project_id = "leadrescue-ai"
+
+[db]
+major_version = 15
+
+[auth]
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["http://localhost:3000/auth/callback"]
