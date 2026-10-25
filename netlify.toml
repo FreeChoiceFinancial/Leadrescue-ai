@@ -1,0 +1,14 @@
+[build]
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NODE_OPTIONS = "--max-old-space-size=4096"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Scheduled jobs call authenticated cron routes. Configure the secret in the Netlify UI.
+# Follow-ups: hourly. Weekly report: Monday 13:00 UTC.
+# Netlify scheduled functions are not required; use an external scheduler or Netlify cron
+# hitting these paths with `Authorization: Bearer $CRON_SECRET`.
