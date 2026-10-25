@@ -57,7 +57,7 @@ Create an OAuth client, obtain a refresh token with calendar free/busy and event
 
 ## Assistant and email
 
-`OPENAI_API_KEY` enables wording help. The rule engine still owns the stage, the emergency stop, and the slot list. If the model drops the offered times, its reply is discarded.
+The assistant stays on the deterministic script unless `LLM_LIVE=true` and `OPENAI_API_KEY` are both set, and `DEMO_MODE` is not on. A key injected by Netlify AI Gateway does not count. On the public demo, set `DEMO_MODE=true` so the model is never called. The rule engine still owns the stage, the emergency stop, and the slot list. If the model drops the offered times, its reply is discarded.
 
 `RESEND_API_KEY` and `EMAIL_FROM` deliver owner emails. Otherwise the escalation is stored as sandbox.
 

@@ -31,6 +31,7 @@ Without credentials every integration stays in a labeled sandbox. Copy `.env.exa
 | Missed-call text, STOP/HELP, quiet hours, consent log | Real engine, tested |
 | Qualification, emergency escalation, 3 follow-ups after YES | Real engine, tested |
 | Booking | Demo provider by default. Google free/busy runs only with OAuth credentials |
+| Assistant | Script by default. Live wording needs `LLM_LIVE=true` and `DEMO_MODE` off. An injected `OPENAI_API_KEY` stays sandbox |
 | Dashboard and weekly report | Real UI. Sample data until Supabase Auth is connected |
 | Stripe | Test-mode client. No call is made without `sk_test_` keys. Live keys are refused |
 | Tenant isolation | SQL migration plus a PGlite test that denies cross-tenant access |

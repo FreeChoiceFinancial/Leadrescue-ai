@@ -21,7 +21,7 @@ Snapshot for the MVP in this repository. No production accounts are connected he
 - No Twilio account, no 10DLC brand, and no campaign. Live SMS stays blocked until `a2p_brand_status` is approved.
 - No Stripe test products or webhook endpoint.
 - No Google OAuth refresh token.
-- No OpenAI key. The assistant is the deterministic script.
+- The public demo must set `DEMO_MODE=true`. The assistant stays on the script unless that flag is off and `LLM_LIVE=true`. An injected `OPENAI_API_KEY` is not treated as live.
 - No Resend mailbox.
 - Privacy policy and terms are drafts and still need a lawyer. The operator legal name and mailing address are placeholders.
 - Cron is documented and authenticated, but nothing schedules it until you add a scheduler in the host.

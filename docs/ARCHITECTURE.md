@@ -53,7 +53,7 @@ Every external system has a mode:
 | Supabase | URL and publishable key, plus a secret for writes from webhooks | In-memory Demo HVAC Co, or an onboarding cookie |
 | Twilio | Account SID and auth token, and a valid signature | Unsigned requests return 503 unless `x-leadrescue-sandbox: 1` |
 | SMS send | Twilio configured and `a2p_brand_status = approved` | `sandbox_not_sent` or `blocked_a2p` |
-| Assistant | `OPENAI_API_KEY` | Deterministic script, labeled sandbox |
+| Assistant | `LLM_LIVE=true`, a key, and demo mode off | Deterministic script, labeled sandbox. An injected `OPENAI_API_KEY` is not opt-in. `DEMO_MODE=true` never calls the model. |
 | Google Calendar | Client id, secret, and refresh token, and the shop selected Google | Demo openings, labeled sandbox |
 | Email | Resend key and from-address | Escalation text is stored, not delivered |
 | Stripe | `sk_test_` key | Checkout explains sandbox and creates no session. `sk_live_` is refused |
