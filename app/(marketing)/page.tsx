@@ -1,9 +1,12 @@
 import Link from "next/link";
 import { CitationLink } from "@/components/marketing/CitationList";
+import { DoneForYou } from "@/components/marketing/DoneForYou";
 import { FoundingPilot } from "@/components/marketing/FoundingPilot";
 import { PricingCards } from "@/components/marketing/PricingCards";
+import { ResultsGuarantee } from "@/components/marketing/ResultsGuarantee";
+import { RevenueCalculator } from "@/components/marketing/RevenueCalculator";
 import { WhyItMatters } from "@/components/marketing/WhyItMatters";
-import { PAID_PLANS } from "@/lib/billing/plans";
+import { OVERAGE_USD, PAID_PLANS, SETUP_FEE_USD } from "@/lib/billing/plans";
 import { AC_REPAIR_AVERAGE_USD, HOMEGUIDE_AC_REPAIR } from "@/lib/marketing/trust";
 import { usd } from "@/lib/format";
 
@@ -101,7 +104,13 @@ export default function HomePage() {
         </div>
       </section>
 
+      <DoneForYou />
+
       <WhyItMatters />
+
+      <RevenueCalculator />
+
+      <ResultsGuarantee />
 
       <section className="border-b border-ink/10 bg-paper">
         <div className="mx-auto grid max-w-6xl gap-8 px-6 py-14 md:grid-cols-3">
@@ -124,7 +133,7 @@ export default function HomePage() {
           <div>
             <h2 className="font-display text-4xl">Simple monthly pricing.</h2>
             <p className="mt-2 max-w-xl text-ink/70">
-              These prices are month to month, with no contract. Annual pricing is a 12-month commitment and is on the pricing page. The setup fee is {usd(99)} once. Extra conversations are half a dollar.
+              These prices are month to month, with no contract. Annual pricing is a 12-month commitment and is on the pricing page. The setup fee is {usd(SETUP_FEE_USD)} on month-to-month and $0 on annual. Extra conversations are {usd(OVERAGE_USD)}.
             </p>
           </div>
           <div className="flex flex-wrap gap-4">

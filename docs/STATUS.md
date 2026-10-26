@@ -29,6 +29,7 @@ Snapshot for the MVP in this repository. No production accounts are connected he
 - Privacy policy and terms are drafts and still need a lawyer. The operator legal name and mailing address are placeholders.
 - Cron is documented and authenticated, but nothing schedules it until you add a scheduler in the host.
 - Counsel has not signed off on the missed-call consent theory.
+- The results guarantee on the homepage, `/pricing`, the FAQ, and `/guarantee` is pending legal review. The public sentence is `RESULTS_GUARANTEE` in `lib/marketing/guarantee.ts`.
 
 ## Costs to budget
 
