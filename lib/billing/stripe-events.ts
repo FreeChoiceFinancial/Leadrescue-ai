@@ -1,4 +1,4 @@
-import { allowanceFor, isPaidPlan, type PaidPlanId } from "@/lib/billing/plans";
+import { allowanceFor, normalizePaidPlan, type PaidPlanId } from "@/lib/billing/plans";
 import type { SubscriptionStatus, Tenant } from "@/lib/domain/types";
 
 export type StripeSubscriptionSnapshot = {
@@ -22,9 +22,7 @@ const STATUS_MAP: Record<string, SubscriptionStatus> = {
 };
 
 export function applySubscriptionSnapshot(tenant: Tenant, snapshot: StripeSubscriptionSnapshot): Tenant {
-  const plan: PaidPlanId | null = isPaidPlan(snapshot.plan ?? "")
-    ? (snapshot.plan as PaidPlanId)
-    : null;
+  const plan: PaidPlanId | null = normalizePaidPlan(snapshot.plan ?? "");
   const status = snapshot.status ? STATUS_MAP[snapshot.status] : undefined;
   const nextPlan = plan ?? tenant.plan;
   return {

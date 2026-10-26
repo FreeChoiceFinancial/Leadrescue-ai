@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { SignupForm } from "@/components/auth/SignupForm";
 import { supabaseConfigured } from "@/lib/integrations/status";
-import { PAID_PLANS, isBillingInterval, isPaidPlan, TRIAL_DAYS } from "@/lib/billing/plans";
+import { PAID_PLANS, isBillingInterval, normalizePaidPlan, TRIAL_DAYS } from "@/lib/billing/plans";
 import { usd } from "@/lib/format";
 import { FOUNDING_PILOT, foundingPlanSummary, isFoundingPilotOffer } from "@/lib/marketing/trust";
 
@@ -9,9 +9,10 @@ export const metadata: Metadata = { title: "Start a trial" };
 
 export default async function SignupPage({ searchParams }: { searchParams: Promise<{ plan?: string; offer?: string; interval?: string }> }) {
   const params = await searchParams;
-  const plan = params.plan && isPaidPlan(params.plan) ? params.plan : "starter";
-  const interval = params.interval && isBillingInterval(params.interval) ? params.interval : "month";
+  const plan = normalizePaidPlan(params.plan ?? "") ?? "starter";
   const foundingPilot = isFoundingPilotOffer(params.offer);
+  const requested = params.interval && isBillingInterval(params.interval) ? params.interval : "month";
+  const interval = foundingPilot ? "month" : requested;
   const chosen = PAID_PLANS[plan];
   return (
     <div className="mx-auto grid max-w-5xl gap-10 px-6 py-16 lg:grid-cols-2">

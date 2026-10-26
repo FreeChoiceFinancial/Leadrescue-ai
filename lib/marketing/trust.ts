@@ -1,4 +1,4 @@
-import { PAID_PLANS, type PaidPlanId } from "@/lib/billing/plans";
+import { OVERAGE_USD, PAID_PLANS, SETUP_FEE_USD, type PaidPlanId } from "@/lib/billing/plans";
 import { usd } from "@/lib/format";
 
 export type Citation = {
@@ -95,10 +95,10 @@ export function foundingMonthlyUsd(listUsd: number): number {
 const FOUNDING_MONTHLY = {
   starter: foundingMonthlyUsd(PAID_PLANS.starter.monthlyUsd),
   growth: foundingMonthlyUsd(PAID_PLANS.growth.monthlyUsd),
-  premium: foundingMonthlyUsd(PAID_PLANS.premium.monthlyUsd),
+  pro: foundingMonthlyUsd(PAID_PLANS.pro.monthlyUsd),
 } as const;
 
-const FOUNDING_PRICE_LINE = `After the ${FOUNDING_FREE_MONTHS} free months, the price is 25% off list for ${FOUNDING_DISCOUNT_YEARS} years: Starter ${usd(FOUNDING_MONTHLY.starter)}, Growth ${usd(FOUNDING_MONTHLY.growth)}, and Premium ${usd(FOUNDING_MONTHLY.premium)} per month.`;
+const FOUNDING_PRICE_LINE = `After the ${FOUNDING_FREE_MONTHS} free months, the price is 25% off the month-to-month price for ${FOUNDING_DISCOUNT_YEARS} years: Starter ${usd(FOUNDING_MONTHLY.starter)}, Growth ${usd(FOUNDING_MONTHLY.growth)}, and Pro ${usd(FOUNDING_MONTHLY.pro)} per month.`;
 
 export const FOUNDING_PILOT = {
   shops: FOUNDING_PILOT_SHOPS,
@@ -111,7 +111,7 @@ export const FOUNDING_PILOT = {
   lede: "The first 5 HVAC shops get 3 months free: no subscription fee and no $99 setup fee during the pilot.",
   points: [
     FOUNDING_PRICE_LINE,
-    "The plan stays month to month. Cancel anytime.",
+    "The plan stays month to month. Cancel anytime. The founding discount is not combined with annual.",
     "We ask for honest feedback on what helped and what did not.",
     "A public review or a case study happens only if you are happy with the product, and only if you want to. The 3 free months and the 25% discount do not depend on a review, a star rating, or a case study.",
     "If we publish a case study, it will say the shop joined as a founding pilot.",
@@ -127,7 +127,7 @@ export function foundingPilotPlainText(): string {
 export function foundingPlanSummary(plan: PaidPlanId): string {
   const list = PAID_PLANS[plan].monthlyUsd;
   const pilot = foundingMonthlyUsd(list);
-  return `This signup is flagged as a founding pilot for one of the first ${FOUNDING_PILOT_SHOPS} HVAC shops. The first ${FOUNDING_FREE_MONTHS} months have no subscription fee and no $99 setup fee. After that, ${PAID_PLANS[plan].name} is ${usd(pilot)} per month for ${FOUNDING_DISCOUNT_YEARS} years, 25% off the ${usd(list)} list price. The plan stays month to month, and you can cancel anytime. A review is optional and is not required for the discount.`;
+  return `This signup is flagged as a founding pilot for one of the first ${FOUNDING_PILOT_SHOPS} HVAC shops. The first ${FOUNDING_FREE_MONTHS} months have no subscription fee and no $99 setup fee. After that, ${PAID_PLANS[plan].name} is ${usd(pilot)} per month for ${FOUNDING_DISCOUNT_YEARS} years, 25% off the ${usd(list)} month-to-month price. The plan stays month to month, and you can cancel anytime. The founding discount is not combined with annual. A review is optional and is not required for the discount.`;
 }
 
 export function isFoundingPilotOffer(value: string | undefined): boolean {
@@ -167,7 +167,7 @@ export const COMPARISON_COLUMNS: ComparisonColumn[] = [
     note: "This product. Prices below are the ones published on this site.",
     facts: {
       price: {
-        text: `List price is Starter ${usd(PAID_PLANS.starter.monthlyUsd)}, Growth ${usd(PAID_PLANS.growth.monthlyUsd)}, and Premium ${usd(PAID_PLANS.premium.monthlyUsd)} per month. Extra conversations are $0.50. A 14-day trial is included. The founding pilot for the first ${FOUNDING_PILOT_SHOPS} HVAC shops is ${FOUNDING_FREE_MONTHS} months with no subscription fee and no setup fee, then 25% off list for ${FOUNDING_DISCOUNT_YEARS} years (${usd(FOUNDING_MONTHLY.starter)}, ${usd(FOUNDING_MONTHLY.growth)}, and ${usd(FOUNDING_MONTHLY.premium)}). Annual is a 12-month commitment at Starter ${usd(PAID_PLANS.starter.annualMonthlyUsd)} per month (${usd(PAID_PLANS.starter.annualYearlyUsd)} per year), Growth ${usd(PAID_PLANS.growth.annualMonthlyUsd)} per month (${usd(PAID_PLANS.growth.annualYearlyUsd)} per year), and Premium ${usd(PAID_PLANS.premium.annualMonthlyUsd)} per month (${usd(PAID_PLANS.premium.annualYearlyUsd)} per year).`,
+        text: `List price is Starter ${usd(PAID_PLANS.starter.monthlyUsd)}, Growth ${usd(PAID_PLANS.growth.monthlyUsd)}, and Pro ${usd(PAID_PLANS.pro.monthlyUsd)} per month. Extra conversations are ${usd(OVERAGE_USD)}. A 14-day trial is included. The founding pilot for the first ${FOUNDING_PILOT_SHOPS} HVAC shops is ${FOUNDING_FREE_MONTHS} months with no subscription fee and no setup fee, then 25% off the month-to-month price for ${FOUNDING_DISCOUNT_YEARS} years (${usd(FOUNDING_MONTHLY.starter)}, ${usd(FOUNDING_MONTHLY.growth)}, and ${usd(FOUNDING_MONTHLY.pro)}). That discount is not combined with annual. Annual is a 12-month commitment at Starter ${usd(PAID_PLANS.starter.annualMonthlyUsd)} per month (${usd(PAID_PLANS.starter.annualYearlyUsd)} per year), Growth ${usd(PAID_PLANS.growth.annualMonthlyUsd)} per month (${usd(PAID_PLANS.growth.annualYearlyUsd)} per year), and Pro ${usd(PAID_PLANS.pro.annualMonthlyUsd)} per month (${usd(PAID_PLANS.pro.annualYearlyUsd)} per year).`,
         sources: [LEADRESCUE_PRICING],
       },
       contract: {
@@ -175,7 +175,7 @@ export const COMPARISON_COLUMNS: ComparisonColumn[] = [
         sources: [LEADRESCUE_PRICING],
       },
       setup: {
-        text: `List plans include a $99 setup fee once, for forwarding guidance, quiet hours, owner alerts, and the first calendar connection. Founding-pilot shops pay no subscription fee and no $99 setup fee during the first ${FOUNDING_FREE_MONTHS} months.`,
+        text: `Month-to-month plans include a ${usd(SETUP_FEE_USD)} setup fee once, for forwarding guidance, quiet hours, owner alerts, and the first calendar connection. Annual plans have no setup fee. Founding-pilot shops pay no subscription fee and no ${usd(SETUP_FEE_USD)} setup fee during the first ${FOUNDING_FREE_MONTHS} months.`,
         sources: [LEADRESCUE_PRICING],
       },
       focus: {

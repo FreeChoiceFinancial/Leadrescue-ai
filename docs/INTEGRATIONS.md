@@ -1,6 +1,6 @@
 # CRM integrations
 
-HubSpot and Zoho CRM are included on Starter, Growth, and Premium. The connection is **coming soon**. This build does not perform a live sync unless an operator sets `CRM_LIVE=true` and demo mode is off. The settings screen says `Coming soon / sandbox` while the flag is off. Pricing and the FAQ say coming soon. Do not describe a shop as connected to a live CRM.
+HubSpot and Zoho CRM are included on Starter, Growth, and Pro. The connection is **coming soon**. This build does not perform a live sync unless an operator sets `CRM_LIVE=true` and demo mode is off. The settings screen says `Coming soon / sandbox` while the flag is off. Pricing and the FAQ say coming soon. Do not describe a shop as connected to a live CRM.
 
 ## Developer accounts
 

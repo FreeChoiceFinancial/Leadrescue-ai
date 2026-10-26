@@ -1,4 +1,4 @@
-import { PAID_PLANS } from "@/lib/billing/plans";
+import { OVERAGE_USD, PAID_PLANS, SETUP_FEE_USD } from "@/lib/billing/plans";
 import { usd } from "@/lib/format";
 import { foundingPilotPlainText } from "@/lib/marketing/trust";
 
@@ -17,7 +17,7 @@ export const FAQS = [
   },
   {
     q: "Do HubSpot and Zoho come with every plan?",
-    a: "Coming soon. HubSpot and Zoho CRM sync is included on Starter, Growth, and Premium. The connection stays in sandbox until CRM sync is turned on, and LeadRescue does not claim a live sync.",
+    a: "Coming soon. HubSpot and Zoho CRM sync is included on Starter, Growth, and Pro. The connection stays in sandbox until CRM sync is turned on, and LeadRescue does not claim a live sync.",
   },
   {
     q: "What is a conversation on the invoice?",
@@ -55,7 +55,7 @@ export const FAQS = [
   },
   {
     q: "What does annual billing cost?",
-    a: `Annual is a 12-month commitment, billed once per year. Starter is ${usd(PAID_PLANS.starter.annualMonthlyUsd)} per month (${usd(PAID_PLANS.starter.annualYearlyUsd)} per year), Growth is ${usd(PAID_PLANS.growth.annualMonthlyUsd)} per month (${usd(PAID_PLANS.growth.annualYearlyUsd)} per year), and Premium is ${usd(PAID_PLANS.premium.annualMonthlyUsd)} per month (${usd(PAID_PLANS.premium.annualYearlyUsd)} per year). Month-to-month stays ${usd(PAID_PLANS.starter.monthlyUsd)}, ${usd(PAID_PLANS.growth.monthlyUsd)}, and ${usd(PAID_PLANS.premium.monthlyUsd)}, with no contract and cancel anytime. The month-to-month price is 60% higher than the annual per-month price.`,
+    a: `Annual is a 12-month commitment, billed once per year. Starter is ${usd(PAID_PLANS.starter.annualMonthlyUsd)} per month (${usd(PAID_PLANS.starter.annualYearlyUsd)} per year), Growth is ${usd(PAID_PLANS.growth.annualMonthlyUsd)} per month (${usd(PAID_PLANS.growth.annualYearlyUsd)} per year), and Pro is ${usd(PAID_PLANS.pro.annualMonthlyUsd)} per month (${usd(PAID_PLANS.pro.annualYearlyUsd)} per year). Month-to-month stays ${usd(PAID_PLANS.starter.monthlyUsd)}, ${usd(PAID_PLANS.growth.monthlyUsd)}, and ${usd(PAID_PLANS.pro.monthlyUsd)}, with no contract and cancel anytime. The month-to-month price is 60% higher than the annual per-month price. The setup fee is ${usd(SETUP_FEE_USD)} on month-to-month and $0 on annual. Extra conversations are ${usd(OVERAGE_USD)} on every plan.`,
   },
   {
     q: "How do I cancel?",

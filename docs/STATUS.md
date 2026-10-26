@@ -5,7 +5,7 @@ Snapshot for the MVP in this repository. No production accounts are connected he
 ## Done
 
 - Public marketing site with sourced cost and missed-call figures, a comparison page, pricing, FAQ, and draft privacy and terms.
-- Founding pilot for the first 5 HVAC shops: 3 months with no subscription fee and no $99 setup fee, then 25% off list for 2 years (Starter $149.25, Growth $299.25, Premium $524.25 per month). Month to month, cancel anytime. A review is optional and is not required for the discount.
+- Founding pilot for the first 5 HVAC shops: 3 months with no subscription fee and no $99 setup fee, then 25% off the month-to-month price for 2 years (Starter $111.75, Growth $209.25, Pro $374.25 per month). Month to month, cancel anytime. The discount is not combined with annual. A review is optional and is not required for the discount.
 - Fictional `/demo` path from missed call to booked appointment, including gas-smell escalation and STOP. It does not call Twilio.
 - Sandbox dashboard for Demo HVAC Co: leads, a lead thread, appointments, activity, consent log, weekly report, billing, and settings.
 - Onboarding wizard. Without Supabase it stores a profile cookie and does not create a login.
@@ -13,7 +13,7 @@ Snapshot for the MVP in this repository. No production accounts are connected he
 - HubSpot and Zoho CRM scaffolding: per-shop OAuth, encrypted refresh tokens, an idempotent sync queue, and a settings log. `CRM_LIVE` defaults off. Demo mode forces the sandbox label `Coming soon / sandbox`. Pricing and the FAQ list both CRMs as coming soon on every plan. See [Integrations](INTEGRATIONS.md).
 - Domain engine: informational missed-call text, quiet hours, STOP/HELP/START, qualification, three follow-ups after YES, emergency and frustration escalation.
 - Booking provider interface, demo slots, and a Google Calendar free/busy implementation that stays in sandbox without credentials.
-- Stripe test-mode checkout, customer portal, webhook snapshot sync, $99 setup, $0.50 overage, 14-day trial. Month-to-month is Starter $199, Growth $399, Premium $699. Annual is a 12-month commitment at $124, $249, and $437 per month ($1,488, $2,988, and $5,244 per year). Live secret keys are refused, and the app does not create Stripe products.
+- Stripe test-mode checkout, customer portal, webhook snapshot sync, 14-day trial. Month-to-month is Starter $149, Growth $279, Pro $499, with a $99 setup fee. Annual is a 12-month commitment at $93, $174, and $312 per month ($1,116, $2,088, and $3,744 per year) and has no setup fee. Overage is $0.40. Live secret keys are refused, and the app does not create Stripe products.
 - Supabase migration with forced RLS. Automated test denies cross-tenant access.
 - GitHub Actions workflow runs tests, typecheck, and build.
 - `netlify.toml` for the Next.js runtime.
@@ -42,7 +42,7 @@ These are public list prices to re-check before you buy. They are not quotes.
 - Netlify: the free tier can serve a preview; a paid plan is needed for commercial traffic and longer builds.
 - Domain and a monitored email mailbox for CAN-SPAM.
 
-Customer prices stay Starter $199, Growth $399, Premium $699, setup $99, overage $0.50.
+Customer prices stay Starter $149, Growth $279, Pro $499. Setup is $99 on month-to-month and $0 on annual. Overage is $0.40.
 
 ## Next actions
 

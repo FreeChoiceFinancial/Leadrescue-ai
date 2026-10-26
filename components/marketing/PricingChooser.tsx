@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { PricingCards } from "@/components/marketing/PricingCards";
-import type { BillingInterval } from "@/lib/billing/plans";
+import { SETUP_FEE_USD, type BillingInterval } from "@/lib/billing/plans";
+import { usd } from "@/lib/format";
 
 export function PricingChooser() {
   const [interval, setInterval] = useState<BillingInterval>("month");
@@ -19,8 +20,8 @@ export function PricingChooser() {
         </div>
         <p className="max-w-xl text-sm text-ink/75">
           {interval === "month"
-            ? "Month to month. No contract. Cancel anytime."
-            : "Annual is a 12-month commitment, billed once per year."}
+            ? `Month to month. No contract. Cancel anytime. Setup fee ${usd(SETUP_FEE_USD)}.`
+            : "Annual is a 12-month commitment, billed once per year. No setup fee."}
         </p>
       </div>
       <div className="mt-6">

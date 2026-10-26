@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PAID_PLANS, type BillingInterval } from "@/lib/billing/plans";
+import { PAID_PLANS, SETUP_FEE_USD, type BillingInterval } from "@/lib/billing/plans";
 import { usd } from "@/lib/format";
 
 export function BillingActions({ current }: { current: string }) {
@@ -60,7 +60,7 @@ export function BillingActions({ current }: { current: string }) {
         </button>
       </div>
       <p className="mb-4 text-sm text-ink/70">
-        {interval === "month" ? "Month to month. No contract. Cancel anytime." : "Annual is a 12-month commitment, billed once per year."}
+        {interval === "month" ? `Month to month. No contract. Cancel anytime. Setup fee ${usd(SETUP_FEE_USD)}.` : "Annual is a 12-month commitment, billed once per year. No setup fee."}
       </p>
       <div className="grid gap-3 md:grid-cols-3">
         {Object.values(PAID_PLANS).map((plan) => (
