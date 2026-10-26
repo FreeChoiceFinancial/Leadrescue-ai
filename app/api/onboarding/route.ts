@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { smsConsentRecord } from "@/lib/compliance/sms-consent";
 import { normalizePhone } from "@/lib/domain/phone";
 import { onboardingSchema } from "@/lib/onboarding/schema";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -18,6 +19,7 @@ export async function POST(request: Request) {
   if (!businessPhone || !ownerPhone || (input.smsFromNumber && !sms)) {
     return Response.json({ error: "Use a 10-digit US number or E.164." }, { status: 400 });
   }
+  const consent = smsConsentRecord(input.smsConsent);
   if (supabaseConfigured()) {
     const supabase = await createSupabaseServerClient();
     if (!supabase) return Response.json({ error: "Supabase is unavailable." }, { status: 500 });
@@ -34,10 +36,18 @@ export async function POST(request: Request) {
       p_address: input.physicalAddress,
     });
     if (error) return Response.json({ error: error.message }, { status: 400 });
-    if (sms && data) {
-      await supabase.from("tenants").update({ sms_from_number: sms }).eq("id", data);
+    if (data) {
+      const { error: consentError } = await supabase
+        .from("tenants")
+        .update({
+          ...(sms ? { sms_from_number: sms } : {}),
+          sms_consent: consent.smsConsent,
+          sms_consent_at: consent.smsConsentAt,
+        })
+        .eq("id", data);
+      if (consentError) return Response.json({ error: consentError.message }, { status: 400 });
     }
-    return Response.json({ mode: "live", tenantId: data });
+    return Response.json({ mode: "live", tenantId: data, ...consent });
   }
   const jar = await cookies();
   jar.set(
@@ -47,6 +57,7 @@ export async function POST(request: Request) {
       businessPhone,
       ownerNotifyPhone: ownerPhone,
       smsFromNumber: sms,
+      ...consent,
     }),
     { httpOnly: true, sameSite: "lax", path: "/", maxAge: 60 * 60 * 24 * 14 },
   );

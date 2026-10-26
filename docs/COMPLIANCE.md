@@ -35,6 +35,12 @@ The terms on `/guarantee` say live means after that shop's own A2P 10DLC brand a
 - Until then, messages are stored as `blocked_a2p` or `sandbox_not_sent` and are not handed to Twilio.
 - Budget for per-brand and per-campaign carrier fees. Those are the customer's cost, not pooled across tenants.
 
+## SMS program page
+
+- `/sms-terms` names the program LeadRescue AI by Pollack Resilience LLC, the message types, variable frequency, message and data rates, STOP and HELP, and carrier non-liability. It links the privacy policy and the terms.
+- The privacy policy states: "No mobile information will be shared with third parties or affiliates for marketing or promotional purposes. Text messaging originator opt-in data and consent will not be shared with any third parties."
+- Web forms that collect a phone number include an unchecked, optional SMS consent checkbox. The saved record stores the boolean and, when the box is checked, a timestamp. The demo assistant is unchanged and the opt-in form does not send a text.
+
 ## CTIA
 
 - Messages identify the business.

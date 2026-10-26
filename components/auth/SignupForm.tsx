@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { SmsConsentCheckbox } from "@/components/marketing/SmsConsentCheckbox";
+import { smsConsentRecord } from "@/lib/compliance/sms-consent";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 
 export function SignupForm({
@@ -18,6 +20,7 @@ export function SignupForm({
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const [smsConsent, setSmsConsent] = useState(false);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -27,10 +30,12 @@ export function SignupForm({
     const email = String(form.get("email") ?? "");
     const password = String(form.get("password") ?? "");
     const name = String(form.get("business") ?? "");
+    const phone = String(form.get("phone") ?? "");
+    const consent = smsConsentRecord(smsConsent);
     if (!configured) {
       window.sessionStorage.setItem(
         "lr_signup_draft",
-        JSON.stringify({ email, name, plan, interval, mode: "sandbox", foundingPilot }),
+        JSON.stringify({ email, name, phone, plan, interval, mode: "sandbox", foundingPilot, ...consent }),
       );
       router.push("/onboarding");
       return;
@@ -47,7 +52,13 @@ export function SignupForm({
       password,
       options: {
         emailRedirectTo: redirect,
-        data: { business_name: name, ...(foundingPilot ? { founding_pilot: true } : {}) },
+        data: {
+          business_name: name,
+          phone,
+          sms_consent: consent.smsConsent,
+          sms_consent_at: consent.smsConsentAt,
+          ...(foundingPilot ? { founding_pilot: true } : {}),
+        },
       },
     });
     if (signError) {
@@ -82,6 +93,11 @@ export function SignupForm({
         Business name
         <input className="field mt-1" name="business" required minLength={2} placeholder="Northwind HVAC" />
       </label>
+      <label className="block text-sm font-semibold">
+        Mobile phone
+        <input className="field mt-1" name="phone" type="tel" autoComplete="tel" inputMode="tel" />
+      </label>
+      <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
       <input type="hidden" name="plan" value={plan} />
       <input type="hidden" name="interval" value={interval} />
       <input type="hidden" name="offer" value={foundingPilot ? "founding-pilot" : ""} />

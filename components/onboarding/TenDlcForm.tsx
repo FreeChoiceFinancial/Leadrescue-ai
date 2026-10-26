@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { SmsConsentCheckbox } from "@/components/marketing/SmsConsentCheckbox";
 import {
   A2P_LIMITS,
   A2P_RECEIVED_CONFIRMATION,
@@ -45,6 +46,7 @@ export function TenDlcForm({ defaults, saved }: { defaults: TenDlcDefaults; save
   const [helpMessage, setHelpMessage] = useState(defaults.helpMessage);
   const [useCase, setUseCase] = useState<"customer_care" | "mixed">(saved?.useCase ?? "customer_care");
   const [attested, setAttested] = useState(false);
+  const [smsConsent, setSmsConsent] = useState(false);
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -75,6 +77,7 @@ export function TenDlcForm({ defaults, saved }: { defaults: TenDlcDefaults; save
         stopMessage,
         helpMessage,
         attested,
+        smsConsent,
       }),
     });
     const payload = (await response.json()) as Partial<Receipt> & { error?: string; ein?: string };
@@ -145,6 +148,7 @@ export function TenDlcForm({ defaults, saved }: { defaults: TenDlcDefaults; save
         <Field label="Contact name" name="contactName" required autoComplete="name" />
         <Field label="Contact email" name="contactEmail" type="email" required autoComplete="email" />
         <Field label="Contact phone" name="contactPhone" type="tel" required autoComplete="tel" />
+        <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
       </section>
 
       <section className="space-y-4">
