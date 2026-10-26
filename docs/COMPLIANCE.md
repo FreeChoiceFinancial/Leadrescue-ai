@@ -18,7 +18,7 @@ Counsel needs to decide whether a missed call is prior express consent for this 
 
 ## Results guarantee
 
-Pending legal review. The public sentence lives in one constant, `RESULTS_GUARANTEE` in `lib/marketing/guarantee.ts`:
+Pending legal review. The public sentence lives in one constant, `RESULTS_GUARANTEE` in `lib/marketing/guarantee.ts`. The homepage, `/pricing`, the FAQ, the footer, and `/guarantee` stay hidden unless `SHOW_GUARANTEE=true`. That flag defaults off until the owner approves the wording:
 
 > If LeadRescue doesn't book at least one job you would have otherwise missed in your first 60 days live, we refund every dollar you paid.
 

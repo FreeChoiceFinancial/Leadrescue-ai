@@ -1,6 +1,6 @@
 import { OVERAGE_USD, PAID_PLANS, SETUP_FEE_USD } from "@/lib/billing/plans";
 import { usd } from "@/lib/format";
-import { GUARANTEE_PATH, GUARANTEE_TERMS_TEXT, RESULTS_GUARANTEE } from "@/lib/marketing/guarantee";
+import { GUARANTEE_PATH, GUARANTEE_TERMS_TEXT, RESULTS_GUARANTEE, showGuarantee } from "@/lib/marketing/guarantee";
 import { foundingPilotPlainText } from "@/lib/marketing/trust";
 
 export const FAQS = [
@@ -73,3 +73,11 @@ export const FAQS = [
     a: "No. Both pages are drafts and say so. Have a lawyer review them before you rely on them or send customer traffic.",
   },
 ];
+
+const GUARANTEE_FAQ_QUESTION = "What if LeadRescue does not book a job?";
+
+/** Drops the results promise unless SHOW_GUARANTEE=true. The sentence stays in FAQS for review. */
+export function publicFaqs() {
+  if (showGuarantee()) return FAQS;
+  return FAQS.filter((item) => item.q !== GUARANTEE_FAQ_QUESTION);
+}

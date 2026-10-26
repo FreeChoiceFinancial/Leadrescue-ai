@@ -1,19 +1,27 @@
 import { readFileSync } from "node:fs";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { PAID_PLANS } from "@/lib/billing/plans";
-import { FAQS } from "@/lib/marketing/faq";
+import { FAQS, publicFaqs } from "@/lib/marketing/faq";
 import {
   GUARANTEE_PATH,
   GUARANTEE_PENDING_LEGAL_REVIEW,
   GUARANTEE_REQUEST_EMAIL,
   GUARANTEE_TERMS_TEXT,
   RESULTS_GUARANTEE,
+  showGuarantee,
 } from "@/lib/marketing/guarantee";
 import { estimateMissedRevenue, paybackLabel, REVENUE_ESTIMATE_LABEL } from "@/lib/marketing/revenue";
 import { DONE_FOR_YOU } from "@/lib/marketing/setup";
 
 const PROMISE =
   "If LeadRescue doesn't book at least one job you would have otherwise missed in your first 60 days live, we refund every dollar you paid.";
+
+const previousGuaranteeFlag = process.env.SHOW_GUARANTEE;
+
+afterEach(() => {
+  if (previousGuaranteeFlag === undefined) delete process.env.SHOW_GUARANTEE;
+  else process.env.SHOW_GUARANTEE = previousGuaranteeFlag;
+});
 
 describe("results guarantee", () => {
   it("keeps the public promise in one constant", () => {
@@ -43,8 +51,34 @@ describe("results guarantee", () => {
     expect(status).toContain("RESULTS_GUARANTEE");
     expect(status.toLowerCase()).toContain("pending legal review");
     expect(readFileSync("app/(marketing)/guarantee/page.tsx", "utf8")).toContain("RESULTS_GUARANTEE");
-    expect(readFileSync("app/(marketing)/page.tsx", "utf8")).toContain("ResultsGuarantee");
-    expect(readFileSync("app/(marketing)/pricing/page.tsx", "utf8")).toContain("ResultsGuarantee");
+    expect(compliance).toContain("SHOW_GUARANTEE");
+    expect(status).toContain("SHOW_GUARANTEE");
+    expect(readFileSync(".env.example", "utf8")).toContain("SHOW_GUARANTEE=");
+  });
+
+  it("hides the promise unless SHOW_GUARANTEE is exactly true", () => {
+    delete process.env.SHOW_GUARANTEE;
+    expect(showGuarantee()).toBe(false);
+    expect(publicFaqs().some((item) => item.q === "What if LeadRescue does not book a job?")).toBe(false);
+    expect(FAQS.some((item) => item.a.startsWith(RESULTS_GUARANTEE))).toBe(true);
+    process.env.SHOW_GUARANTEE = "false";
+    expect(showGuarantee()).toBe(false);
+    process.env.SHOW_GUARANTEE = " true ";
+    expect(showGuarantee()).toBe(true);
+    expect(publicFaqs().some((item) => item.href === "/guarantee")).toBe(true);
+    const home = readFileSync("app/(marketing)/page.tsx", "utf8");
+    const pricing = readFileSync("app/(marketing)/pricing/page.tsx", "utf8");
+    const guarantee = readFileSync("app/(marketing)/guarantee/page.tsx", "utf8");
+    expect(home).toContain("showGuarantee() ? <ResultsGuarantee /> : null");
+    expect(home).toContain("<RevenueCalculator />");
+    expect(home).toContain("<DoneForYou />");
+    expect(pricing).toContain("showGuarantee() ? <ResultsGuarantee /> : null");
+    expect(pricing).toContain("<RevenueCalculator />");
+    expect(pricing).toContain("<DoneForYou />");
+    expect(readFileSync("app/(marketing)/faq/page.tsx", "utf8")).toContain("publicFaqs()");
+    expect(readFileSync("components/marketing/SiteFooter.tsx", "utf8")).toContain("showGuarantee()");
+    expect(guarantee).toContain("notFound()");
+    expect(guarantee).toContain("showGuarantee()");
   });
 });
 

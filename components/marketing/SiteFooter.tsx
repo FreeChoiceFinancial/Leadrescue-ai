@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BRAND_LINE } from "@/lib/brand";
+import { showGuarantee } from "@/lib/marketing/guarantee";
 
 export function SiteFooter() {
   return (
@@ -28,7 +29,7 @@ export function SiteFooter() {
           <div className="mt-3 flex flex-col gap-2">
             <Link href="/privacy">Privacy policy</Link>
             <Link href="/terms">Terms of service</Link>
-            <Link href="/guarantee">Results guarantee</Link>
+            {showGuarantee() ? <Link href="/guarantee">Results guarantee</Link> : null}
           </div>
           <p className="mt-4 text-cream/60">Policies are drafts and need legal review before launch.</p>
         </div>

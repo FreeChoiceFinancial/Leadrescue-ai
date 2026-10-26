@@ -1,15 +1,21 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { LegalBanner } from "@/components/marketing/LegalBanner";
 import {
   GUARANTEE_PENDING_LEGAL_REVIEW,
   GUARANTEE_REQUEST_EMAIL,
   GUARANTEE_TERMS_TEXT,
   RESULTS_GUARANTEE,
+  showGuarantee,
 } from "@/lib/marketing/guarantee";
 
-export const metadata: Metadata = { title: "Results guarantee (draft)" };
+export function generateMetadata(): Metadata {
+  if (!showGuarantee()) return { title: "Not found" };
+  return { title: "Results guarantee (draft)" };
+}
 
 export default function GuaranteePage() {
+  if (!showGuarantee()) notFound();
   return (
     <article className="mx-auto max-w-3xl space-y-6 px-6 py-16 text-sm leading-relaxed text-ink/80">
       <p className="text-xs font-bold uppercase tracking-[0.18em] text-copper">{GUARANTEE_PENDING_LEGAL_REVIEW}</p>

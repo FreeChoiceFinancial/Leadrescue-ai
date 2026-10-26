@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { GUARANTEE_PATH, GUARANTEE_PENDING_LEGAL_REVIEW, RESULTS_GUARANTEE } from "@/lib/marketing/guarantee";
+import { GUARANTEE_PATH, GUARANTEE_PENDING_LEGAL_REVIEW, RESULTS_GUARANTEE, showGuarantee } from "@/lib/marketing/guarantee";
 
 export function ResultsGuarantee() {
+  if (!showGuarantee()) return null;
   return (
     <section className="mx-auto max-w-6xl px-6 py-12">
       <div className="rounded-[28px] border border-ink/10 bg-cream px-6 py-8 sm:px-10">

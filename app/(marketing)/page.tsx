@@ -7,6 +7,7 @@ import { ResultsGuarantee } from "@/components/marketing/ResultsGuarantee";
 import { RevenueCalculator } from "@/components/marketing/RevenueCalculator";
 import { WhyItMatters } from "@/components/marketing/WhyItMatters";
 import { OVERAGE_USD, PAID_PLANS, SETUP_FEE_USD } from "@/lib/billing/plans";
+import { showGuarantee } from "@/lib/marketing/guarantee";
 import { AC_REPAIR_AVERAGE_USD, HOMEGUIDE_AC_REPAIR } from "@/lib/marketing/trust";
 import { usd } from "@/lib/format";
 
@@ -110,7 +111,7 @@ export default function HomePage() {
 
       <RevenueCalculator />
 
-      <ResultsGuarantee />
+      {showGuarantee() ? <ResultsGuarantee /> : null}
 
       <section className="border-b border-ink/10 bg-paper">
         <div className="mx-auto grid max-w-6xl gap-8 px-6 py-14 md:grid-cols-3">

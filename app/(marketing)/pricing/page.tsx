@@ -6,6 +6,7 @@ import { PricingChooser } from "@/components/marketing/PricingChooser";
 import { ResultsGuarantee } from "@/components/marketing/ResultsGuarantee";
 import { RevenueCalculator } from "@/components/marketing/RevenueCalculator";
 import { OVERAGE_USD, SETUP_FEE_USD, TRIAL_DAYS } from "@/lib/billing/plans";
+import { showGuarantee } from "@/lib/marketing/guarantee";
 import { usd } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Pricing" };
@@ -21,7 +22,7 @@ export default function PricingPage() {
           See how that compares with Podium, Hatch, and HighLevel.
         </Link>
       </p>
-      <ResultsGuarantee />
+      {showGuarantee() ? <ResultsGuarantee /> : null}
       <RevenueCalculator />
       <DoneForYou />
       <FoundingPilot contained={false} />
