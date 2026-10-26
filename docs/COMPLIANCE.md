@@ -16,6 +16,14 @@ This is an engineering checklist for a US HVAC missed-call product. It is not le
 
 Counsel needs to decide whether a missed call is prior express consent for this informational text in each state you operate, and whether any follow-up needs prior express written consent.
 
+## Results guarantee
+
+Pending legal review. The public sentence lives in one constant, `RESULTS_GUARANTEE` in `lib/marketing/guarantee.ts`. The homepage, `/pricing`, the FAQ, the footer, and `/guarantee` stay hidden unless `SHOW_GUARANTEE=true`. That flag defaults off until the owner approves the wording:
+
+> If LeadRescue doesn't book at least one job you would have otherwise missed in your first 60 days live, we refund every dollar you paid.
+
+The terms on `/guarantee` say live means after that shop's own A2P 10DLC brand and campaign are approved, the refund covers subscription fees and setup fees, and the shop requests it by email within 14 days after the 60-day window. The request address is a placeholder. A lawyer has not signed this promise.
+
 ## A2P 10DLC
 
 - Each customer registers their own brand and campaign. LeadRescue does not put every shop on one shared campaign.

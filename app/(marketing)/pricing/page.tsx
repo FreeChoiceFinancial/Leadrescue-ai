@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { DoneForYou } from "@/components/marketing/DoneForYou";
 import { FoundingPilot } from "@/components/marketing/FoundingPilot";
 import { PricingChooser } from "@/components/marketing/PricingChooser";
+import { ResultsGuarantee } from "@/components/marketing/ResultsGuarantee";
+import { RevenueCalculator } from "@/components/marketing/RevenueCalculator";
 import { OVERAGE_USD, SETUP_FEE_USD, TRIAL_DAYS } from "@/lib/billing/plans";
+import { showGuarantee } from "@/lib/marketing/guarantee";
 import { usd } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Pricing" };
@@ -18,6 +22,9 @@ export default function PricingPage() {
           See how that compares with Podium, Hatch, and HighLevel.
         </Link>
       </p>
+      {showGuarantee() ? <ResultsGuarantee /> : null}
+      <RevenueCalculator />
+      <DoneForYou />
       <FoundingPilot contained={false} />
       <div className="mt-10">
         <PricingChooser />
