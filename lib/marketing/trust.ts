@@ -167,11 +167,11 @@ export const COMPARISON_COLUMNS: ComparisonColumn[] = [
     note: "This product. Prices below are the ones published on this site.",
     facts: {
       price: {
-        text: `List price is Starter ${usd(PAID_PLANS.starter.monthlyUsd)}, Growth ${usd(PAID_PLANS.growth.monthlyUsd)}, and Premium ${usd(PAID_PLANS.premium.monthlyUsd)} per month. Extra conversations are $0.50. A 14-day trial is included. The founding pilot for the first ${FOUNDING_PILOT_SHOPS} HVAC shops is ${FOUNDING_FREE_MONTHS} months with no subscription fee and no setup fee, then 25% off list for ${FOUNDING_DISCOUNT_YEARS} years (${usd(FOUNDING_MONTHLY.starter)}, ${usd(FOUNDING_MONTHLY.growth)}, and ${usd(FOUNDING_MONTHLY.premium)}).`,
+        text: `List price is Starter ${usd(PAID_PLANS.starter.monthlyUsd)}, Growth ${usd(PAID_PLANS.growth.monthlyUsd)}, and Premium ${usd(PAID_PLANS.premium.monthlyUsd)} per month. Extra conversations are $0.50. A 14-day trial is included. The founding pilot for the first ${FOUNDING_PILOT_SHOPS} HVAC shops is ${FOUNDING_FREE_MONTHS} months with no subscription fee and no setup fee, then 25% off list for ${FOUNDING_DISCOUNT_YEARS} years (${usd(FOUNDING_MONTHLY.starter)}, ${usd(FOUNDING_MONTHLY.growth)}, and ${usd(FOUNDING_MONTHLY.premium)}). Annual is a 12-month commitment at Starter ${usd(PAID_PLANS.starter.annualMonthlyUsd)} per month (${usd(PAID_PLANS.starter.annualYearlyUsd)} per year), Growth ${usd(PAID_PLANS.growth.annualMonthlyUsd)} per month (${usd(PAID_PLANS.growth.annualYearlyUsd)} per year), and Premium ${usd(PAID_PLANS.premium.annualMonthlyUsd)} per month (${usd(PAID_PLANS.premium.annualYearlyUsd)} per year).`,
         sources: [LEADRESCUE_PRICING],
       },
       contract: {
-        text: "Month to month. Cancel from the Stripe customer portal once a live subscription exists.",
+        text: "Month to month has no contract and cancels from the Stripe customer portal once a live subscription exists. Annual is a 12-month commitment.",
         sources: [LEADRESCUE_PRICING],
       },
       setup: {

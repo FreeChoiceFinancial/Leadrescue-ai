@@ -1,5 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { isPaidPlan, SETUP_FEE_USD, TRIAL_DAYS, type PaidPlanId } from "@/lib/billing/plans";
+import { isPaidPlan, SETUP_FEE_USD, TRIAL_DAYS, stripePriceId, type BillingInterval, type PaidPlanId } from "@/lib/billing/plans";
 
 export function stripeMode(): "test" | "sandbox" | "refused" {
   const key = process.env.STRIPE_SECRET_KEY ?? "";
@@ -37,21 +37,23 @@ export function validStripeSignature(
 
 export async function createCheckoutSession(input: {
   plan: PaidPlanId;
+  interval?: BillingInterval;
   tenantId: string;
   customerId: string | null;
   setupFeePaid: boolean;
   successUrl: string;
   cancelUrl: string;
 }): Promise<{ mode: "test" | "sandbox"; url: string }> {
+  const interval = input.interval ?? "month";
   const mode = stripeMode();
   if (mode === "refused") {
     throw new Error("Refusing a live Stripe secret. This MVP only accepts sk_test_ keys.");
   }
   if (mode === "sandbox") {
-    return { mode: "sandbox", url: `/dashboard/billing?sandbox_checkout=${input.plan}` };
+    return { mode: "sandbox", url: `/dashboard/billing?sandbox_checkout=${input.plan}&interval=${interval}` };
   }
-  const price = priceIdFor(input.plan);
-  if (!price) throw new Error(`Missing Stripe price id for ${input.plan}.`);
+  const price = stripePriceId(input.plan, interval);
+  if (!price) throw new Error(`Missing Stripe test price id for ${input.plan} (${interval}). Create it in the Stripe test dashboard. Live products are not created here.`);
   const params = new URLSearchParams();
   params.set("mode", "subscription");
   params.set("success_url", input.successUrl);
@@ -59,9 +61,11 @@ export async function createCheckoutSession(input: {
   params.set("client_reference_id", input.tenantId);
   params.set("metadata[tenant_id]", input.tenantId);
   params.set("metadata[plan]", input.plan);
+  params.set("metadata[interval]", interval);
   params.set("subscription_data[trial_period_days]", String(TRIAL_DAYS));
   params.set("subscription_data[metadata][tenant_id]", input.tenantId);
   params.set("subscription_data[metadata][plan]", input.plan);
+  params.set("subscription_data[metadata][interval]", interval);
   params.set("line_items[0][price]", price);
   params.set("line_items[0][quantity]", "1");
   if (!input.setupFeePaid && process.env.STRIPE_PRICE_SETUP) {
@@ -94,12 +98,6 @@ export async function reportOverageUsage(input: { subscriptionItemId: string; qu
   });
   await stripeForm(`/v1/subscription_items/${input.subscriptionItemId}/usage_records`, params);
   return { mode: "test" };
-}
-
-function priceIdFor(plan: PaidPlanId): string | undefined {
-  if (plan === "starter") return process.env.STRIPE_PRICE_STARTER;
-  if (plan === "growth") return process.env.STRIPE_PRICE_GROWTH;
-  return process.env.STRIPE_PRICE_PREMIUM;
 }
 
 async function stripeForm(path: string, params: URLSearchParams): Promise<Record<string, unknown>> {

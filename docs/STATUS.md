@@ -11,7 +11,7 @@ Snapshot for the MVP in this repository. No production accounts are connected he
 - Onboarding wizard. Without Supabase it stores a profile cookie and does not create a login.
 - Domain engine: informational missed-call text, quiet hours, STOP/HELP/START, qualification, three follow-ups after YES, emergency and frustration escalation.
 - Booking provider interface, demo slots, and a Google Calendar free/busy implementation that stays in sandbox without credentials.
-- Stripe test-mode checkout, customer portal, webhook snapshot sync, $99 setup, $0.50 overage, 14-day trial. Live secret keys are refused.
+- Stripe test-mode checkout, customer portal, webhook snapshot sync, $99 setup, $0.50 overage, 14-day trial. Month-to-month is Starter $199, Growth $399, Premium $699. Annual is a 12-month commitment at $124, $249, and $437 per month ($1,488, $2,988, and $5,244 per year). Live secret keys are refused, and the app does not create Stripe products.
 - Supabase migration with forced RLS. Automated test denies cross-tenant access.
 - GitHub Actions workflow runs tests, typecheck, and build.
 - `netlify.toml` for the Next.js runtime.

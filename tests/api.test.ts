@@ -1,5 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { planFromStripePrice, stripePriceId } from "@/lib/billing/plans";
 import { demoTenant } from "@/lib/demo/tenant";
+import { createCheckoutSession } from "@/lib/integrations/stripe";
 import { handleFollowUpCron, handleSmsWebhook, handleStripeWebhook, handleVoiceWebhook, handleWeeklyReportCron } from "@/lib/http/webhooks";
 import { blankWorkspace } from "@/lib/engine/workspace";
 import { createMemoryStore } from "@/lib/store/memory";
@@ -73,6 +75,68 @@ describe("webhook routes", () => {
     expect(after?.leads[0]?.optedOut).toBe(true);
     expect(after?.consentEvents.some((event) => event.eventType === "stop")).toBe(true);
     expect((await store.getById(tenantB.id))?.leads).toHaveLength(0);
+  });
+
+  it("checks out in sandbox and refuses live Stripe keys without creating products", async () => {
+    const keys = ["STRIPE_SECRET_KEY", "STRIPE_PRICE_STARTER", "STRIPE_PRICE_STARTER_ANNUAL"] as const;
+    const previous = Object.fromEntries(keys.map((key) => [key, process.env[key]]));
+    delete process.env.STRIPE_SECRET_KEY;
+    const fetchImpl = vi.fn();
+    vi.stubGlobal("fetch", fetchImpl);
+    try {
+      const sandbox = await createCheckoutSession({
+        plan: "starter",
+        interval: "year",
+        tenantId: tenantA.id,
+        customerId: null,
+        setupFeePaid: false,
+        successUrl: "http://localhost/ok",
+        cancelUrl: "http://localhost/cancel",
+      });
+      expect(sandbox).toEqual({ mode: "sandbox", url: "/dashboard/billing?sandbox_checkout=starter&interval=year" });
+      expect(fetchImpl).not.toHaveBeenCalled();
+
+      process.env.STRIPE_SECRET_KEY = "sk_live_should_not_create_products";
+      await expect(
+        createCheckoutSession({
+          plan: "growth",
+          interval: "year",
+          tenantId: tenantA.id,
+          customerId: null,
+          setupFeePaid: false,
+          successUrl: "http://localhost/ok",
+          cancelUrl: "http://localhost/cancel",
+        }),
+      ).rejects.toThrow(/live Stripe secret/);
+      expect(fetchImpl).not.toHaveBeenCalled();
+
+      process.env.STRIPE_SECRET_KEY = "sk_test_example";
+      delete process.env.STRIPE_PRICE_STARTER_ANNUAL;
+      await expect(
+        createCheckoutSession({
+          plan: "starter",
+          interval: "year",
+          tenantId: tenantA.id,
+          customerId: null,
+          setupFeePaid: false,
+          successUrl: "http://localhost/ok",
+          cancelUrl: "http://localhost/cancel",
+        }),
+      ).rejects.toThrow(/test price id/);
+      expect(fetchImpl).not.toHaveBeenCalled();
+
+      process.env.STRIPE_PRICE_STARTER = "price_month";
+      process.env.STRIPE_PRICE_STARTER_ANNUAL = "price_year";
+      expect(stripePriceId("starter", "year")).toBe("price_year");
+      expect(planFromStripePrice("price_year")).toBe("starter");
+      expect(planFromStripePrice("price_month")).toBe("starter");
+    } finally {
+      vi.unstubAllGlobals();
+      for (const key of keys) {
+        if (previous[key] === undefined) delete process.env[key];
+        else process.env[key] = previous[key];
+      }
+    }
   });
 
   it("accepts a labeled sandbox Stripe event and refuses a live-looking key", async () => {

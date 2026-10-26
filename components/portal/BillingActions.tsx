@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { PAID_PLANS } from "@/lib/billing/plans";
+import { PAID_PLANS, type BillingInterval } from "@/lib/billing/plans";
 import { usd } from "@/lib/format";
 
 export function BillingActions({ current }: { current: string }) {
   const [message, setMessage] = useState<string | null>(null);
   const [pending, setPending] = useState<string | null>(null);
+  const [interval, setInterval] = useState<BillingInterval>("month");
 
   async function checkout(plan: string) {
     setPending(plan);
@@ -14,7 +15,7 @@ export function BillingActions({ current }: { current: string }) {
     const response = await fetch("/api/stripe/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan }),
+      body: JSON.stringify({ plan, interval }),
     });
     const payload = (await response.json()) as { error?: string; mode?: string; url?: string };
     if (!response.ok || !payload.url) {
@@ -50,6 +51,17 @@ export function BillingActions({ current }: { current: string }) {
 
   return (
     <div>
+      <div role="group" aria-label="Billing interval" className="mb-4 inline-flex rounded-full border border-ink/15 bg-paper p-1">
+        <button type="button" aria-pressed={interval === "month"} className={`rounded-full px-4 py-2 text-sm font-semibold ${interval === "month" ? "bg-ink text-cream" : ""}`} onClick={() => setInterval("month")}>
+          Monthly
+        </button>
+        <button type="button" aria-pressed={interval === "year"} className={`rounded-full px-4 py-2 text-sm font-semibold ${interval === "year" ? "bg-ink text-cream" : ""}`} onClick={() => setInterval("year")}>
+          Annual
+        </button>
+      </div>
+      <p className="mb-4 text-sm text-ink/70">
+        {interval === "month" ? "Month to month. No contract. Cancel anytime." : "Annual is a 12-month commitment, billed once per year."}
+      </p>
       <div className="grid gap-3 md:grid-cols-3">
         {Object.values(PAID_PLANS).map((plan) => (
           <button
@@ -61,7 +73,11 @@ export function BillingActions({ current }: { current: string }) {
           >
             <span className="text-xs font-bold uppercase tracking-wider text-copper">{plan.id === current ? "Current" : "Choose"}</span>
             <span className="mt-2 block font-display text-3xl">{plan.name}</span>
-            <span className="mt-1 block text-sm">{usd(plan.monthlyUsd)} / month</span>
+            <span className="mt-1 block text-sm">
+              {interval === "year"
+                ? `${usd(plan.annualMonthlyUsd)} / month, ${usd(plan.annualYearlyUsd)} / year`
+                : `${usd(plan.monthlyUsd)} / month`}
+            </span>
             <span className="mt-2 block text-xs text-ink/60">{pending === plan.id ? "Contacting Stripe…" : "Open checkout"}</span>
           </button>
         ))}

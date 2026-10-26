@@ -123,7 +123,9 @@ export default function HomePage() {
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
             <h2 className="font-display text-4xl">Simple monthly pricing.</h2>
-            <p className="mt-2 max-w-xl text-ink/70">No annual contract. The setup fee is {usd(99)} once. Extra conversations are half a dollar.</p>
+            <p className="mt-2 max-w-xl text-ink/70">
+              These prices are month to month, with no contract. Annual pricing is a 12-month commitment and is on the pricing page. The setup fee is {usd(99)} once. Extra conversations are half a dollar.
+            </p>
           </div>
           <div className="flex flex-wrap gap-4">
             <Link href="/compare" className="link text-sm font-semibold text-copper">

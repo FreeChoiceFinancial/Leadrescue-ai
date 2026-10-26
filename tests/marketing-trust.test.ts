@@ -50,6 +50,19 @@ describe("marketing trust copy", () => {
     expect(blob).toMatch(/do not depend on a review/i);
     expect(foundingPilotPlainText()).toContain("$299.25");
     expect(FAQS.find((item) => item.q === "What is the founding pilot?")?.a).toBe(foundingPilotPlainText());
+    const annual = FAQS.find((item) => item.q === "What does annual billing cost?")?.a ?? "";
+    expect(annual).toMatch(/12-month commitment/);
+    expect(annual).toContain("$124");
+    expect(annual).toContain("$1,488");
+    expect(annual).toContain("$249");
+    expect(annual).toContain("$2,988");
+    expect(annual).toContain("$437");
+    expect(annual).toContain("$5,244");
+    expect(annual).toContain(`$${PAID_PLANS.starter.monthlyUsd}`);
+    expect(foundingPilotPlainText()).not.toMatch(/12-month commitment/);
+    expect(FAQS.find((item) => item.q === "Can I add my team?")?.a).toBe(
+      "Yes, unlimited users on every plan; pricing is based on conversations, not seats.",
+    );
     expect(foundingPlanSummary("premium")).toContain("$524.25");
     expect(foundingSignupHref("growth")).toBe("/signup?plan=growth&offer=founding-pilot");
     expect(isFoundingPilotOffer("founding-pilot")).toBe(true);

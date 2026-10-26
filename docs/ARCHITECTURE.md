@@ -38,7 +38,7 @@ flowchart LR
 
 ## Tenancy
 
-A user belongs to one business through `memberships`. Policies call `app.tenant_ids_for_user()`, a security-definer function in the private `app` schema. It reads memberships with `auth.uid()`. It does not read `user_metadata`.
+A user belongs to one business through `memberships`. A shop can have unlimited members. Plans do not charge per seat and the schema has no seat cap. Policies call `app.tenant_ids_for_user()`, a security-definer function in the private `app` schema. It reads memberships with `auth.uid()`. It does not read `user_metadata`.
 
 Billing counters live on `subscriptions`, which authenticated users can read and cannot update. A2P approval is a locked column on `tenants`.
 

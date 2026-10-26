@@ -4,7 +4,17 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 
-export function SignupForm({ configured, plan, foundingPilot = false }: { configured: boolean; plan: string; foundingPilot?: boolean }) {
+export function SignupForm({
+  configured,
+  plan,
+  foundingPilot = false,
+  interval = "month",
+}: {
+  configured: boolean;
+  plan: string;
+  foundingPilot?: boolean;
+  interval?: "month" | "year";
+}) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -20,7 +30,7 @@ export function SignupForm({ configured, plan, foundingPilot = false }: { config
     if (!configured) {
       window.sessionStorage.setItem(
         "lr_signup_draft",
-        JSON.stringify({ email, name, plan, mode: "sandbox", foundingPilot }),
+        JSON.stringify({ email, name, plan, interval, mode: "sandbox", foundingPilot }),
       );
       router.push("/onboarding");
       return;
@@ -73,6 +83,7 @@ export function SignupForm({ configured, plan, foundingPilot = false }: { config
         <input className="field mt-1" name="business" required minLength={2} placeholder="Northwind HVAC" />
       </label>
       <input type="hidden" name="plan" value={plan} />
+      <input type="hidden" name="interval" value={interval} />
       <input type="hidden" name="offer" value={foundingPilot ? "founding-pilot" : ""} />
       {error ? <p className="text-sm text-stamp">{error}</p> : null}
       <button className="btn btn-primary w-full" type="submit" disabled={pending}>

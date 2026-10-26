@@ -1,3 +1,4 @@
+import { isBillingInterval } from "@/lib/billing/plans";
 import { assertPaidPlan, createCheckoutSession } from "@/lib/integrations/stripe";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -5,8 +6,9 @@ export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json().catch(() => ({}))) as { plan?: string };
+    const body = (await request.json().catch(() => ({}))) as { plan?: string; interval?: string };
     const plan = assertPaidPlan(body.plan);
+    const interval = body.interval && isBillingInterval(body.interval) ? body.interval : "month";
     const origin = process.env.NEXT_PUBLIC_APP_URL || new URL(request.url).origin;
     let tenantId = "sandbox";
     let customerId: string | null = null;
@@ -28,6 +30,7 @@ export async function POST(request: Request) {
     }
     const session = await createCheckoutSession({
       plan,
+      interval,
       tenantId,
       customerId,
       setupFeePaid,
