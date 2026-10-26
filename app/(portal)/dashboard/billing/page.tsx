@@ -30,7 +30,7 @@ export default async function BillingPage({ searchParams }: { searchParams: Prom
           <StatusChip value={tenant.subscriptionStatus} />
         </div>
         <p className="mt-3 text-sm">
-          {used} of {allowance} conversations used. Overage {usd(overageAmountUsd(tenant.overageConversations))} at {usd(OVERAGE_USD)} each. Setup fee {tenant.setupFeePaid ? "paid" : `${usd(SETUP_FEE_USD)} due`}.
+          {used} of {allowance} conversations used. Overage {usd(overageAmountUsd(tenant.overageConversations))} at {usd(OVERAGE_USD)} each. Setup fee {tenant.setupFeePaid ? "paid" : `${usd(SETUP_FEE_USD)} on month-to-month, $0 on annual`}.
         </p>
         <div className="mt-4 h-3 overflow-hidden rounded-full bg-paper">
           <div className="h-full bg-copper" style={{ width: `${width}%` }} />

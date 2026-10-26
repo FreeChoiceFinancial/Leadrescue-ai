@@ -1,5 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { isPaidPlan, SETUP_FEE_USD, TRIAL_DAYS, stripePriceId, type BillingInterval, type PaidPlanId } from "@/lib/billing/plans";
+import { normalizePaidPlan, SETUP_FEE_USD, TRIAL_DAYS, stripePriceId, type BillingInterval, type PaidPlanId } from "@/lib/billing/plans";
 
 export function stripeMode(): "test" | "sandbox" | "refused" {
   const key = process.env.STRIPE_SECRET_KEY ?? "";
@@ -68,7 +68,7 @@ export async function createCheckoutSession(input: {
   params.set("subscription_data[metadata][interval]", interval);
   params.set("line_items[0][price]", price);
   params.set("line_items[0][quantity]", "1");
-  if (!input.setupFeePaid && process.env.STRIPE_PRICE_SETUP) {
+  if (interval === "month" && !input.setupFeePaid && process.env.STRIPE_PRICE_SETUP) {
     params.set("line_items[1][price]", process.env.STRIPE_PRICE_SETUP);
     params.set("line_items[1][quantity]", "1");
   }
@@ -120,10 +120,11 @@ async function stripeForm(path: string, params: URLSearchParams): Promise<Record
 }
 
 export function assertPaidPlan(value: unknown): PaidPlanId {
-  if (typeof value !== "string" || !isPaidPlan(value)) {
-    throw new Error("Choose starter, growth, or premium.");
+  const plan = typeof value === "string" ? normalizePaidPlan(value) : null;
+  if (!plan) {
+    throw new Error("Choose starter, growth, or pro.");
   }
-  return value;
+  return plan;
 }
 
 export const SETUP_FEE_LABEL = `$${SETUP_FEE_USD} one-time setup`;

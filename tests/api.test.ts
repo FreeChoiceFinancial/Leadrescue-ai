@@ -78,7 +78,7 @@ describe("webhook routes", () => {
   });
 
   it("checks out in sandbox and refuses live Stripe keys without creating products", async () => {
-    const keys = ["STRIPE_SECRET_KEY", "STRIPE_PRICE_STARTER", "STRIPE_PRICE_STARTER_ANNUAL"] as const;
+    const keys = ["STRIPE_SECRET_KEY", "STRIPE_PRICE_STARTER", "STRIPE_PRICE_STARTER_ANNUAL", "STRIPE_PRICE_SETUP"] as const;
     const previous = Object.fromEntries(keys.map((key) => [key, process.env[key]]));
     delete process.env.STRIPE_SECRET_KEY;
     const fetchImpl = vi.fn();
@@ -127,9 +127,24 @@ describe("webhook routes", () => {
 
       process.env.STRIPE_PRICE_STARTER = "price_month";
       process.env.STRIPE_PRICE_STARTER_ANNUAL = "price_year";
+      process.env.STRIPE_PRICE_SETUP = "price_setup";
       expect(stripePriceId("starter", "year")).toBe("price_year");
       expect(planFromStripePrice("price_year")).toBe("starter");
       expect(planFromStripePrice("price_month")).toBe("starter");
+      fetchImpl.mockImplementation(async () => new Response(JSON.stringify({ url: "https://checkout.stripe.test/session" }), { status: 200 }));
+      const checkoutInput = {
+        plan: "starter" as const,
+        tenantId: tenantA.id,
+        customerId: null,
+        setupFeePaid: false,
+        successUrl: "http://localhost/ok",
+        cancelUrl: "http://localhost/cancel",
+      };
+      await createCheckoutSession({ ...checkoutInput, interval: "month" });
+      await createCheckoutSession({ ...checkoutInput, interval: "year" });
+      const bodies = fetchImpl.mock.calls.map((call) => String((call[1] as RequestInit | undefined)?.body ?? ""));
+      expect(bodies.some((body) => body.includes("price_setup") && body.includes("price_month"))).toBe(true);
+      expect(bodies.some((body) => body.includes("price_year") && !body.includes("price_setup"))).toBe(true);
     } finally {
       vi.unstubAllGlobals();
       for (const key of keys) {
@@ -155,7 +170,7 @@ describe("webhook routes", () => {
               id: "sub_sandbox",
               customer: "cus_sandbox",
               status: "active",
-              metadata: { tenant_id: tenantA.id, plan: "premium" },
+              metadata: { tenant_id: tenantA.id, plan: "pro" },
             },
           },
         }),
@@ -164,7 +179,7 @@ describe("webhook routes", () => {
     );
     expect(response.status).toBe(200);
     const saved = await store.getById(tenantA.id);
-    expect(saved?.tenant.plan).toBe("premium");
+    expect(saved?.tenant.plan).toBe("pro");
     expect(saved?.tenant.conversationAllowance).toBe(1000);
     expect(saved?.tenant.subscriptionStatus).toBe("active");
 

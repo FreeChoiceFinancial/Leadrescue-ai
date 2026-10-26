@@ -37,12 +37,12 @@ For each shop:
 
 In the Stripe test dashboard, create the prices yourself. This app does not create products, and it refuses `sk_live_` keys.
 
-- Month-to-month recurring prices: Starter $199, Growth $399, Premium $699.
-- Annual recurring prices, billed once per year as a 12-month commitment: Starter $1,488, Growth $2,988, Premium $5,244.
-- A one-time $99 setup price.
-- A metered $0.50 overage price.
+- Month-to-month recurring prices: Starter $149, Growth $279, Pro $499.
+- Annual recurring prices, billed once per year as a 12-month commitment: Starter $1,116, Growth $2,088, Pro $3,744.
+- A one-time $99 setup price for month-to-month checkout. Annual checkout does not add it.
+- A metered $0.40 overage price.
 
-Put the ids in `STRIPE_PRICE_*`, including `STRIPE_PRICE_STARTER_ANNUAL`, `STRIPE_PRICE_GROWTH_ANNUAL`, and `STRIPE_PRICE_PREMIUM_ANNUAL`. Use `sk_test_` and a test webhook secret. Point the webhook at `/api/stripe/webhook` for:
+Put the ids in `STRIPE_PRICE_*`, including `STRIPE_PRICE_STARTER_ANNUAL`, `STRIPE_PRICE_GROWTH_ANNUAL`, and `STRIPE_PRICE_PRO_ANNUAL`. Use `sk_test_` and a test webhook secret. Point the webhook at `/api/stripe/webhook` for:
 
 - `checkout.session.completed`
 - `customer.subscription.updated`

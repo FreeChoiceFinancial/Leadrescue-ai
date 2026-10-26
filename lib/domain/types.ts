@@ -26,7 +26,7 @@ export const CONVERSATION_STAGES = [
 ] as const;
 export type ConversationStage = (typeof CONVERSATION_STAGES)[number];
 
-export const PLANS = ["trial", "starter", "growth", "premium"] as const;
+export const PLANS = ["trial", "starter", "growth", "pro"] as const;
 export type PlanId = (typeof PLANS)[number];
 
 export type SubscriptionStatus =

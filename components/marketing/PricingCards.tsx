@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { OVERAGE_USD, PAID_PLANS, SETUP_FEE_USD, TRIAL_DAYS, type BillingInterval } from "@/lib/billing/plans";
+import { OVERAGE_USD, PAID_PLANS, TRIAL_DAYS, setupFeeUsd, type BillingInterval } from "@/lib/billing/plans";
 import { CRM_PLAN_LINE } from "@/lib/crm/mode";
 import { usd } from "@/lib/format";
 
@@ -25,7 +25,9 @@ export function PricingCards({ interval = "month" }: { interval?: BillingInterva
             )}
             <p className="mt-4 text-sm leading-relaxed text-ink/80">{plan.blurb}</p>
             <p className="mt-4 text-sm font-semibold">{plan.conversations.toLocaleString()} conversations included</p>
-            <p className="mt-1 text-sm text-ink/70">Then {usd(OVERAGE_USD)} each. Setup fee {usd(SETUP_FEE_USD)} once.</p>
+            <p className="mt-1 text-sm text-ink/70">
+              Then {usd(OVERAGE_USD)} each. {annual ? "No setup fee on annual." : `Setup fee ${usd(setupFeeUsd("month"))} once.`}
+            </p>
             <p className="mt-1 text-sm text-ink/70">Unlimited team members, at no extra cost.</p>
             <p className="mt-1 text-sm text-ink/70">{CRM_PLAN_LINE}</p>
             <Link href={annual ? `/signup?plan=${plan.id}&interval=year` : `/signup?plan=${plan.id}`} className="btn btn-ink mt-6">

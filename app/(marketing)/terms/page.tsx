@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { LegalBanner } from "@/components/marketing/LegalBanner";
+import { OVERAGE_USD, PAID_PLANS, SETUP_FEE_USD } from "@/lib/billing/plans";
+import { usd } from "@/lib/format";
 import { foundingPilotPlainText } from "@/lib/marketing/trust";
 
 export const metadata: Metadata = { title: "Terms of service (draft)" };
@@ -16,7 +18,7 @@ export default function TermsPage() {
       <p>You provide a number you control, complete your own A2P 10DLC brand and campaign, keep quiet hours accurate, and only enable live sending after carrier approval. You are responsible for the calls you forward and for honoring opt-outs. You will not upload purchased lists.</p>
       <h2 className="font-display text-2xl text-ink">Plans and fees</h2>
       <p>
-        Public month-to-month prices are Starter $199, Growth $399, and Premium $699 per month, with no contract. Annual is a 12-month commitment at Starter $124 per month ($1,488 per year), Growth $249 per month ($2,988 per year), and Premium $437 per month ($5,244 per year). A $99 setup fee and $0.50 per conversation over the plan allowance still apply. A 14-day trial applies as described at signup. {foundingPilotPlainText()} Taxes and carrier fees are extra. Stripe test mode does not collect real funds, and this app does not create live Stripe products.
+        Public month-to-month prices are Starter {usd(PAID_PLANS.starter.monthlyUsd)}, Growth {usd(PAID_PLANS.growth.monthlyUsd)}, and Pro {usd(PAID_PLANS.pro.monthlyUsd)} per month, with no contract. Annual is a 12-month commitment at Starter {usd(PAID_PLANS.starter.annualMonthlyUsd)} per month ({usd(PAID_PLANS.starter.annualYearlyUsd)} per year), Growth {usd(PAID_PLANS.growth.annualMonthlyUsd)} per month ({usd(PAID_PLANS.growth.annualYearlyUsd)} per year), and Pro {usd(PAID_PLANS.pro.annualMonthlyUsd)} per month ({usd(PAID_PLANS.pro.annualYearlyUsd)} per year). The setup fee is {usd(SETUP_FEE_USD)} on month-to-month and $0 on annual. Extra conversations are {usd(OVERAGE_USD)}. A 14-day trial applies as described at signup. {foundingPilotPlainText()} Taxes and carrier fees are extra. Stripe test mode does not collect real funds, and this app does not create live Stripe products.
       </p>
       <h2 className="font-display text-2xl text-ink">Acceptable use</h2>
       <p>You will not use the product to deceive callers, hide the business identity, evade STOP, or message outside the consent described in the compliance notes. We may suspend live sending if a campaign is rejected or complaint rates spike.</p>

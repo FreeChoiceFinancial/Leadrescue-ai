@@ -136,7 +136,7 @@ describe("CRM sandbox gate", () => {
     expect(example).not.toMatch(/ZOHO_CLIENT_SECRET=.+/);
     const faq = FAQS.find((item) => item.q === "Do HubSpot and Zoho come with every plan?");
     expect(faq?.a.startsWith("Coming soon.")).toBe(true);
-    expect(faq?.a).toContain("Starter, Growth, and Premium");
+    expect(faq?.a).toContain("Starter, Growth, and Pro");
     expect(faq?.a).toContain("does not claim a live sync");
   });
 });

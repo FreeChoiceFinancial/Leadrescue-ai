@@ -1,7 +1,9 @@
 import type { PlanId, Tenant } from "@/lib/domain/types";
 
+/** Month-to-month setup fee. Annual plans pay no setup fee. */
 export const SETUP_FEE_USD = 99;
-export const OVERAGE_USD = 0.5;
+export const ANNUAL_SETUP_FEE_USD = 0;
+export const OVERAGE_USD = 0.4;
 export const TRIAL_DAYS = 14;
 export const TRIAL_CONVERSATIONS = 150;
 /** No per-plan seat cap. Pricing counts conversations, not team members. */
@@ -15,6 +17,10 @@ export type BillingInterval = (typeof BILLING_INTERVALS)[number];
 
 export function isBillingInterval(value: string): value is BillingInterval {
   return value === "month" || value === "year";
+}
+
+export function setupFeeUsd(interval: BillingInterval): number {
+  return interval === "year" ? ANNUAL_SETUP_FEE_USD : SETUP_FEE_USD;
 }
 
 /** Published annual per-month price: list ÷ 1.6, rounded to the dollar. */
@@ -39,21 +45,21 @@ export const PAID_PLANS = {
   starter: paidPlan({
     id: "starter" as const,
     name: "Starter",
-    monthlyUsd: 199,
+    monthlyUsd: 149,
     conversations: 150,
     blurb: "For a two-truck shop that misses a handful of calls a week.",
   }),
   growth: paidPlan({
     id: "growth" as const,
     name: "Growth",
-    monthlyUsd: 399,
+    monthlyUsd: 279,
     conversations: 400,
     blurb: "For a busy owner-operator with a dispatcher and several crews.",
   }),
-  premium: paidPlan({
-    id: "premium" as const,
-    name: "Premium",
-    monthlyUsd: 699,
+  pro: paidPlan({
+    id: "pro" as const,
+    name: "Pro",
+    monthlyUsd: 499,
     conversations: 1000,
     blurb: "For a 10–15 person company that wants the full recovery desk.",
   }),
@@ -61,8 +67,15 @@ export const PAID_PLANS = {
 
 export type PaidPlanId = keyof typeof PAID_PLANS;
 
+/** Accepts the retired id `premium` and returns Pro. */
+export function normalizePaidPlan(value: string): PaidPlanId | null {
+  if (value === "premium") return "pro";
+  if (value === "starter" || value === "growth" || value === "pro") return value;
+  return null;
+}
+
 export function isPaidPlan(value: string): value is PaidPlanId {
-  return value === "starter" || value === "growth" || value === "premium";
+  return value === "starter" || value === "growth" || value === "pro";
 }
 
 export function allowanceFor(plan: PlanId): number {
@@ -93,7 +106,7 @@ export function overageAmountUsd(overageConversations: number): number {
 const STRIPE_PRICE_ENV: Record<PaidPlanId, Record<BillingInterval, string>> = {
   starter: { month: "STRIPE_PRICE_STARTER", year: "STRIPE_PRICE_STARTER_ANNUAL" },
   growth: { month: "STRIPE_PRICE_GROWTH", year: "STRIPE_PRICE_GROWTH_ANNUAL" },
-  premium: { month: "STRIPE_PRICE_PREMIUM", year: "STRIPE_PRICE_PREMIUM_ANNUAL" },
+  pro: { month: "STRIPE_PRICE_PRO", year: "STRIPE_PRICE_PRO_ANNUAL" },
 };
 
 /** Test-dashboard price ids only. This app never creates Stripe products. */
@@ -102,7 +115,10 @@ export function stripePriceEnv(plan: PaidPlanId, interval: BillingInterval = "mo
 }
 
 export function stripePriceId(plan: PaidPlanId, interval: BillingInterval = "month"): string | undefined {
-  return process.env[stripePriceEnv(plan, interval)];
+  const current = process.env[stripePriceEnv(plan, interval)];
+  if (current) return current;
+  if (plan !== "pro") return undefined;
+  return interval === "year" ? process.env.STRIPE_PRICE_PREMIUM_ANNUAL : process.env.STRIPE_PRICE_PREMIUM;
 }
 
 export function planFromStripePrice(priceId: string | null | undefined): PaidPlanId | null {
