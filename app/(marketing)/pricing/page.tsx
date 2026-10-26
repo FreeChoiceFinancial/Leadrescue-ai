@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { FoundingPilot } from "@/components/marketing/FoundingPilot";
 import { PricingCards } from "@/components/marketing/PricingCards";
 import { OVERAGE_USD, SETUP_FEE_USD, TRIAL_DAYS } from "@/lib/billing/plans";
 import { usd } from "@/lib/format";
@@ -11,8 +13,12 @@ export default function PricingPage() {
       <p className="text-xs font-bold uppercase tracking-[0.18em] text-copper">Month to month</p>
       <h1 className="mt-3 max-w-3xl font-display text-5xl leading-tight">Pay for the conversations you recover. Cancel when you want.</h1>
       <p className="mt-4 max-w-2xl text-lg text-ink/75">
-        Every plan includes a {TRIAL_DAYS}-day trial, a one-time {usd(SETUP_FEE_USD)} setup fee, and {usd(OVERAGE_USD)} for each conversation past the allowance. Ten extra conversations are {usd(OVERAGE_USD * 10)}.
+        Every plan includes a {TRIAL_DAYS}-day trial, a one-time {usd(SETUP_FEE_USD)} setup fee, and {usd(OVERAGE_USD)} for each conversation past the allowance. Ten extra conversations are {usd(OVERAGE_USD * 10)}.{" "}
+        <Link href="/compare" className="link font-semibold text-copper">
+          See how that compares with Podium, Hatch, and HighLevel.
+        </Link>
       </p>
+      <FoundingPilot contained={false} />
       <div className="mt-10">
         <PricingCards />
       </div>

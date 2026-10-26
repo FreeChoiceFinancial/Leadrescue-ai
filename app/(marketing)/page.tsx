@@ -1,6 +1,10 @@
 import Link from "next/link";
+import { CitationLink } from "@/components/marketing/CitationList";
+import { FoundingPilot } from "@/components/marketing/FoundingPilot";
 import { PricingCards } from "@/components/marketing/PricingCards";
+import { WhyItMatters } from "@/components/marketing/WhyItMatters";
 import { PAID_PLANS } from "@/lib/billing/plans";
+import { AC_REPAIR_AVERAGE_USD, HOMEGUIDE_AC_REPAIR } from "@/lib/marketing/trust";
 import { usd } from "@/lib/format";
 
 const steps = [
@@ -12,7 +16,7 @@ const steps = [
 
 export default function HomePage() {
   const starter = PAID_PLANS.starter.monthlyUsd;
-  const ticket = 360;
+  const ticket = AC_REPAIR_AVERAGE_USD;
   return (
     <>
       <section className="ruled border-b border-ink/10">
@@ -34,7 +38,9 @@ export default function HomePage() {
               </Link>
             </div>
             <p className="mt-4 max-w-lg text-sm text-ink/60">
-              Month to month. {usd(starter)} Starter. A single rescued repair — illustrated here at {usd(ticket)} — covers the plan and leaves {usd(ticket - starter)}.
+              Month to month. {usd(starter)} Starter. HomeGuide’s national average for an AC repair is {usd(ticket)} (
+              <CitationLink source={HOMEGUIDE_AC_REPAIR} />
+              ). One repair at that average covers the plan and leaves {usd(ticket - starter)}. Your tickets will differ.
             </p>
           </div>
           <div className="rounded-[28px] bg-ink p-3 shadow-ticket">
@@ -66,7 +72,7 @@ export default function HomePage() {
               </dl>
               <div className="mt-6 grid grid-cols-2 gap-3 border-t border-ink/10 pt-4">
                 <div>
-                  <p className="text-xs uppercase tracking-wider text-ink/50">Illustrative ticket</p>
+                  <p className="text-xs uppercase tracking-wider text-ink/50">AC repair average</p>
                   <p className="font-display text-4xl">{usd(ticket)}</p>
                 </div>
                 <div>
@@ -74,7 +80,9 @@ export default function HomePage() {
                   <p className="font-display text-4xl">{usd(starter)}</p>
                 </div>
               </div>
-              <p className="mt-4 text-sm font-medium text-pine">One saved repair pays for the month, with {usd(ticket - starter)} left over.</p>
+              <p className="mt-4 text-sm font-medium text-pine">
+                One repair at the {usd(ticket)} average covers the month, with {usd(ticket - starter)} left over.
+              </p>
             </div>
           </div>
         </div>
@@ -93,7 +101,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="border-y border-ink/10 bg-cream">
+      <WhyItMatters />
+
+      <section className="border-b border-ink/10 bg-paper">
         <div className="mx-auto grid max-w-6xl gap-8 px-6 py-14 md:grid-cols-3">
           <div>
             <h2 className="font-display text-3xl">Built for the rules, not around them.</h2>
@@ -107,15 +117,22 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-6 py-16">
+      <FoundingPilot />
+
+      <section className="mx-auto max-w-6xl px-6 pb-16">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
             <h2 className="font-display text-4xl">Simple monthly pricing.</h2>
             <p className="mt-2 max-w-xl text-ink/70">No annual contract. The setup fee is {usd(99)} once. Extra conversations are half a dollar.</p>
           </div>
-          <Link href="/pricing" className="link text-sm font-semibold text-copper">
-            See the full pricing page
-          </Link>
+          <div className="flex flex-wrap gap-4">
+            <Link href="/compare" className="link text-sm font-semibold text-copper">
+              Compare with Podium, Hatch, and HighLevel
+            </Link>
+            <Link href="/pricing" className="link text-sm font-semibold text-copper">
+              See the full pricing page
+            </Link>
+          </div>
         </div>
         <PricingCards />
       </section>

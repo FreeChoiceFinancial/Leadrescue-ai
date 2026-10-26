@@ -14,6 +14,8 @@ export function SiteFooter() {
           <p className="font-semibold text-cream/60">Product</p>
           <div className="mt-3 flex flex-col gap-2">
             <Link href="/pricing">Pricing</Link>
+            <Link href="/compare">Compare</Link>
+            <Link href="/#founding">Founding pilot</Link>
             <Link href="/demo">Interactive demo</Link>
             <Link href="/faq">FAQ</Link>
             <Link href="/signup">Trial signup</Link>

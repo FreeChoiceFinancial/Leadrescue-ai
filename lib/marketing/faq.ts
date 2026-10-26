@@ -28,8 +28,12 @@ export const FAQS = [
     a: "Google Calendar free/busy when that account is connected. Without credentials, the product shows demo openings and labels them as sandbox. Nothing is written to a real calendar in that mode.",
   },
   {
-    q: "Is the $360 repair ticket a promise?",
-    a: "No. It is an illustrative US owner-operator repair ticket used to explain the offer. Your tickets, close rate, and season will differ.",
+    q: "Where does the $360 repair figure come from?",
+    a: "HomeGuide’s AC repair guide lists a $360 national average, from member-reported project costs, with a typical range of $150 to $650. HomeGuide’s HVAC repair guide lists a different national average, $293. Angi lists a 2026 national average of $5,978 for AC replacement, from 24,979 verified projects. These are published cost benchmarks. Your tickets, close rate, and season will differ.",
+  },
+  {
+    q: "What is the founding pilot?",
+    a: "The first 5 HVAC shops can take a published plan with the first month free, the $99 setup fee waived, and that plan’s monthly price locked while they stay on it. We ask for honest feedback. A review or case study is optional, only if the shop is happy, and is not required for the discount.",
   },
   {
     q: "How do I cancel?",
