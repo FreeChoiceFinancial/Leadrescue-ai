@@ -16,6 +16,10 @@ export const FAQS = [
     a: "Yes, unlimited users on every plan; pricing is based on conversations, not seats.",
   },
   {
+    q: "Do HubSpot and Zoho come with every plan?",
+    a: "Coming soon. HubSpot and Zoho CRM sync is included on Starter, Growth, and Premium. The connection stays in sandbox until CRM sync is turned on, and LeadRescue does not claim a live sync.",
+  },
+  {
     q: "What is a conversation on the invoice?",
     a: "One caller thread. The qualifying texts and up to three permission-based follow-ups sit inside that same conversation.",
   },

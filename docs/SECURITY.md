@@ -19,6 +19,7 @@
 - User A cannot raise their conversation allowance.
 - User A cannot self-approve A2P.
 - User A cannot read another shop's 10DLC registration or mark their own registration submitted, approved, or rejected. A customer update stays `pending_review`.
+- User A cannot read CRM refresh tokens, another shop's sync log, or the sync queue. A customer update cannot change connection status or replace a token. The service role stores ciphertext only.
 - 10DLC responses, cookies, and error text do not include the EIN. The UI shows a mask.
 - User A can rename their own shop.
 - `anon` sees nothing.
@@ -29,7 +30,7 @@
 
 - The repo is public. Only `.env.example` is committed. `.env` and `.env.local` are gitignored.
 - `NEXT_PUBLIC_` is limited to the Supabase URL and publishable key.
-- The service-role key, Twilio token, Stripe secret, OpenAI key, Google refresh token, Resend key, and cron secret are server-only.
+- The service-role key, Twilio token, Stripe secret, OpenAI key, Google refresh token, Resend key, cron secret, CRM token key, and HubSpot and Zoho client secrets are server-only. CRM refresh tokens are AES-GCM ciphertext. The sync log stores fixed phrases, not caller data.
 - Webhook signatures are required whenever the matching secret is set. Missing secrets do not leave an open production endpoint: unsigned calls return 503 unless a non-production sandbox header is present. Production also requires `LEADRESCUE_ALLOW_SANDBOX_WEBHOOKS=1` for that header to work.
 
 ## App boundaries

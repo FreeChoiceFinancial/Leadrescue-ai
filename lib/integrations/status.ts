@@ -11,6 +11,7 @@ export type IntegrationStatus = {
   email: "live" | "sandbox";
   stripe: "test" | "sandbox" | "refused";
   a2p: "sandbox";
+  crm: "sandbox";
 };
 
 export function supabaseConfigured(): boolean {
@@ -37,6 +38,7 @@ export function integrationStatus(): IntegrationStatus {
     email: process.env.RESEND_API_KEY && process.env.EMAIL_FROM ? "live" : "sandbox",
     stripe,
     a2p: "sandbox",
+    crm: "sandbox",
   };
 }
 

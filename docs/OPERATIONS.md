@@ -53,6 +53,10 @@ Checkout metadata includes `tenant_id` and `plan`. The customer portal uses the 
 
 This build refuses `sk_live_` keys.
 
+## HubSpot and Zoho
+
+Both CRMs are coming soon and are listed on every plan. Leave `CRM_LIVE` unset. `DEMO_MODE` or `PUBLIC_DEMO` forces the mock adapters and the settings label `Coming soon / sandbox`. Setup steps, developer accounts, and the four Zoho data-center consoles are in [Integrations](INTEGRATIONS.md). Apply `supabase/migrations/20261026140000_crm.sql` with the other migrations. Do not log refresh tokens or caller phone numbers.
+
 ## Google Calendar
 
 Create an OAuth client, obtain a refresh token with calendar free/busy and event scopes, and set `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_REFRESH_TOKEN`. Save the shop's calendar id on the tenant and set `booking_provider` to `google`. Without those, openings stay on the demo provider and are labeled sandbox.

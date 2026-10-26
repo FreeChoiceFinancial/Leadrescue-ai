@@ -163,4 +163,77 @@ describe("tenant row level security", () => {
     const filed = await db.query<{ status: string }>("select status from public.a2p_registrations where tenant_id = $1", [northId]);
     expect(filed.rows[0]?.status).toBe("submitted");
   });
+
+  it("keeps CRM tokens and sync rows inside the shop", async () => {
+    const { db, northId, southId } = await database();
+    await db.exec("reset role");
+    await db.exec("set role service_role");
+    await expect(
+      db.query(
+        `insert into public.crm_connections (tenant_id, provider, status, refresh_token_encrypted)
+         values ($1, 'hubspot', 'connected', 'plain-token')`,
+        [northId],
+      ),
+    ).rejects.toThrow(/check constraint|violates check/i);
+    await db.query(
+      `insert into public.crm_connections (tenant_id, provider, status, region, refresh_token_encrypted, scopes)
+       values ($1, 'hubspot', 'connected', null, 'v1.aa.bb.cc', 'crm.objects.contacts.read')`,
+      [northId],
+    );
+    await db.query(
+      `insert into public.crm_sync_log (tenant_id, provider, action, status, attempt, detail)
+       values ($1, 'hubspot', 'contact', 'sandbox', 0, 'Not sent.')`,
+      [northId],
+    );
+    await db.query(
+      `insert into public.crm_sync_jobs (tenant_id, provider, idempotency_key, kind, stage, status, external_id)
+       values ($1, 'hubspot', 'hubspot:lead:contact:new:0', 'contact', 'new', 'succeeded', 'c1')`,
+      [northId],
+    );
+    await expect(
+      db.query(
+        `insert into public.crm_sync_jobs (tenant_id, provider, idempotency_key, kind, stage, last_error)
+         values ($1, 'hubspot', 'bad', 'contact', 'new', $2)`,
+        [northId, "failed for +15125550100"],
+      ),
+    ).rejects.toThrow(/check constraint|violates check/i);
+
+    await asUser(db, USER_A);
+    const visible = await db.query<{ status: string; provider: string }>(
+      "select status, provider from public.crm_connections",
+    );
+    expect(visible.rows).toEqual([{ status: "connected", provider: "hubspot" }]);
+    await expect(db.query("select refresh_token_encrypted from public.crm_connections")).rejects.toThrow(/permission denied/i);
+    await expect(db.query("select * from public.crm_connections")).rejects.toThrow(/permission denied/i);
+    await expect(db.query("update public.crm_connections set status = 'disconnected'")).rejects.toThrow(/permission denied/i);
+    await expect(db.query("select * from public.crm_sync_jobs")).rejects.toThrow(/permission denied/i);
+    const log = await db.query<{ detail: string }>("select detail from public.crm_sync_log");
+    expect(log.rows).toEqual([{ detail: "Not sent." }]);
+    const mapped = await db.query<{ field_mapping: { phone?: string } }>(
+      "update public.crm_connections set field_mapping = '{\"phone\":\"mobile\"}'::jsonb where tenant_id = $1 returning field_mapping",
+      [northId],
+    );
+    expect(mapped.rows[0]?.field_mapping.phone).toBe("mobile");
+    const otherShop = await db.query("update public.crm_connections set field_mapping = '{}'::jsonb where tenant_id = $1 returning id", [southId]);
+    expect(otherShop.rows).toHaveLength(0);
+
+    await asUser(db, USER_B);
+    expect((await db.query("select id from public.crm_connections")).rows).toHaveLength(0);
+    expect((await db.query("select detail from public.crm_sync_log")).rows).toHaveLength(0);
+
+    await db.exec("reset role");
+    await db.exec("grant update (status, refresh_token_encrypted) on public.crm_connections to authenticated");
+    await asUser(db, USER_A);
+    await db.query(
+      "update public.crm_connections set status = 'disconnected', refresh_token_encrypted = 'v1.hacked.tag.body' where tenant_id = $1",
+      [northId],
+    );
+    await db.exec("reset role");
+    await db.exec("set role service_role");
+    const locked = await db.query<{ status: string; refresh_token_encrypted: string }>(
+      "select status, refresh_token_encrypted from public.crm_connections where tenant_id = $1",
+      [northId],
+    );
+    expect(locked.rows[0]).toEqual({ status: "connected", refresh_token_encrypted: "v1.aa.bb.cc" });
+  });
 });
