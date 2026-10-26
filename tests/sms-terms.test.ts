@@ -6,6 +6,7 @@ import {
   BRAND_MAILING_ADDRESS,
   BRAND_PHONE_DISPLAY,
   BRAND_PHONE_E164,
+  BRAND_SITE_URL,
   brandMailingAddress,
 } from "@/lib/brand";
 import {
@@ -27,7 +28,22 @@ const PROMISE =
 describe("SMS program pages", () => {
   it("publishes contact details from one brand config and hides an empty address", () => {
     expect(BRAND_ENTITY_NAME).toBe("Pollack Resilience LLC");
-    expect(BRAND_EMAIL).toBe("Pollackresilience.llc@gmail.com");
+    expect(BRAND_EMAIL).toBe("hello@leadrescue.cloud");
+    expect(BRAND_SITE_URL).toBe("https://leadrescue.cloud");
+    expect(BRAND_PHONE_DISPLAY).toBe("(256) 286-5957");
+    expect(brandMailingAddress()).toBe("11552 South Breeze Place, Wellington, FL 33449");
+    const layout = readFileSync("app/layout.tsx", "utf8");
+    const sitemap = readFileSync("app/sitemap.ts", "utf8");
+    const robots = readFileSync("app/robots.ts", "utf8");
+    expect(layout).toContain("metadataBase");
+    expect(layout).toContain("BRAND_SITE_URL");
+    expect(layout).toContain("openGraph");
+    expect(sitemap).toContain("BRAND_SITE_URL");
+    expect(robots).toContain("sitemap.xml");
+    expect(readFileSync("lib/compliance/messages.ts", "utf8")).toContain("BRAND_EMAIL");
+    expect(readFileSync("lib/compliance/a2p-copy.ts", "utf8")).toContain("BRAND_EMAIL");
+    expect(readFileSync("lib/brand.ts", "utf8")).not.toContain("gmail.com");
+    expect(readFileSync("lib/brand.ts", "utf8")).not.toContain("netlify.app");
     expect(BRAND_PHONE_DISPLAY).toBe("(256) 286-5957");
     expect(BRAND_PHONE_E164).toBe("+12562865957");
     expect(BRAND_MAILING_ADDRESS).toBe("11552 South Breeze Place, Wellington, FL 33449");
