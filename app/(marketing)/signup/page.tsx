@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SignupForm } from "@/components/auth/SignupForm";
 import { supabaseConfigured } from "@/lib/integrations/status";
 import { isPaidPlan, TRIAL_DAYS } from "@/lib/billing/plans";
-import { FOUNDING_PILOT, isFoundingPilotOffer } from "@/lib/marketing/trust";
+import { FOUNDING_PILOT, foundingPlanSummary, isFoundingPilotOffer } from "@/lib/marketing/trust";
 
 export const metadata: Metadata = { title: "Start a trial" };
 
@@ -24,7 +24,7 @@ export default async function SignupPage({ searchParams }: { searchParams: Promi
         </p>
         {foundingPilot ? (
           <p className="mt-4 text-sm leading-relaxed text-ink/75">
-            This signup is flagged as a founding pilot for one of the first {FOUNDING_PILOT.shops} HVAC shops. The first month is free, the setup fee is waived, and this plan’s monthly price stays locked while you keep it. A review is optional and is not required for that price.
+            {foundingPlanSummary(plan)}
           </p>
         ) : null}
       </div>

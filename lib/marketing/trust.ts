@@ -1,4 +1,5 @@
-import type { PaidPlanId } from "@/lib/billing/plans";
+import { PAID_PLANS, type PaidPlanId } from "@/lib/billing/plans";
+import { usd } from "@/lib/format";
 
 export type Citation = {
   label: string;
@@ -82,23 +83,52 @@ export const WHY_IT_MATTERS = {
 
 export const FOUNDING_PILOT_SHOPS = 5;
 export const FOUNDING_PILOT_OFFER = "founding-pilot";
+export const FOUNDING_FREE_MONTHS = 3;
+export const FOUNDING_DISCOUNT_RATE = 0.25;
+export const FOUNDING_DISCOUNT_YEARS = 2;
+
+/** 25% off a published monthly list price, rounded to the cent. */
+export function foundingMonthlyUsd(listUsd: number): number {
+  return Math.round(listUsd * (1 - FOUNDING_DISCOUNT_RATE) * 100) / 100;
+}
+
+const FOUNDING_MONTHLY = {
+  starter: foundingMonthlyUsd(PAID_PLANS.starter.monthlyUsd),
+  growth: foundingMonthlyUsd(PAID_PLANS.growth.monthlyUsd),
+  premium: foundingMonthlyUsd(PAID_PLANS.premium.monthlyUsd),
+} as const;
+
+const FOUNDING_PRICE_LINE = `After the ${FOUNDING_FREE_MONTHS} free months, the price is 25% off list for ${FOUNDING_DISCOUNT_YEARS} years: Starter ${usd(FOUNDING_MONTHLY.starter)}, Growth ${usd(FOUNDING_MONTHLY.growth)}, and Premium ${usd(FOUNDING_MONTHLY.premium)} per month.`;
 
 export const FOUNDING_PILOT = {
   shops: FOUNDING_PILOT_SHOPS,
   offer: FOUNDING_PILOT_OFFER,
+  freeMonths: FOUNDING_FREE_MONTHS,
+  discountYears: FOUNDING_DISCOUNT_YEARS,
+  monthly: FOUNDING_MONTHLY,
   eyebrow: "Founding pilot",
   title: "The first 5 HVAC shops.",
-  lede: "Five owner-operated HVAC companies can start on the published plan price with the first month free and the setup fee waived.",
+  lede: "The first 5 HVAC shops get 3 months free: no subscription fee and no $99 setup fee during the pilot.",
   points: [
-    "The first month is free.",
-    "The $99 setup fee is waived.",
-    "The monthly price of the plan you start on stays your founding price for as long as you keep that plan. The subscription stays month to month.",
+    FOUNDING_PRICE_LINE,
+    "The plan stays month to month. Cancel anytime.",
     "We ask for honest feedback on what helped and what did not.",
-    "A public review or a case study happens only if you are happy with the product, and only if you want to. The free month, the waived setup fee, and the locked price do not depend on a review, a star rating, or a case study.",
+    "A public review or a case study happens only if you are happy with the product, and only if you want to. The 3 free months and the 25% discount do not depend on a review, a star rating, or a case study.",
     "If we publish a case study, it will say the shop joined as a founding pilot.",
   ],
   ftc: "The FTC says a business cannot condition a discount on a review being positive. This offer does not condition the discount on any review.",
-} as const;
+  flagNote: "Founding pilot flag is on for this signup. A review is not required for the 3 free months or the later discount.",
+};
+
+export function foundingPilotPlainText(): string {
+  return [FOUNDING_PILOT.lede, ...FOUNDING_PILOT.points].join(" ");
+}
+
+export function foundingPlanSummary(plan: PaidPlanId): string {
+  const list = PAID_PLANS[plan].monthlyUsd;
+  const pilot = foundingMonthlyUsd(list);
+  return `This signup is flagged as a founding pilot for one of the first ${FOUNDING_PILOT_SHOPS} HVAC shops. The first ${FOUNDING_FREE_MONTHS} months have no subscription fee and no $99 setup fee. After that, ${PAID_PLANS[plan].name} is ${usd(pilot)} per month for ${FOUNDING_DISCOUNT_YEARS} years, 25% off the ${usd(list)} list price. The plan stays month to month, and you can cancel anytime. A review is optional and is not required for the discount.`;
+}
 
 export function isFoundingPilotOffer(value: string | undefined): boolean {
   return value === FOUNDING_PILOT_OFFER;
@@ -137,7 +167,7 @@ export const COMPARISON_COLUMNS: ComparisonColumn[] = [
     note: "This product. Prices below are the ones published on this site.",
     facts: {
       price: {
-        text: "Starter $199, Growth $399, and Premium $699 per month. Extra conversations are $0.50. A 14-day trial is included.",
+        text: `List price is Starter ${usd(PAID_PLANS.starter.monthlyUsd)}, Growth ${usd(PAID_PLANS.growth.monthlyUsd)}, and Premium ${usd(PAID_PLANS.premium.monthlyUsd)} per month. Extra conversations are $0.50. A 14-day trial is included. The founding pilot for the first ${FOUNDING_PILOT_SHOPS} HVAC shops is ${FOUNDING_FREE_MONTHS} months with no subscription fee and no setup fee, then 25% off list for ${FOUNDING_DISCOUNT_YEARS} years (${usd(FOUNDING_MONTHLY.starter)}, ${usd(FOUNDING_MONTHLY.growth)}, and ${usd(FOUNDING_MONTHLY.premium)}).`,
         sources: [LEADRESCUE_PRICING],
       },
       contract: {
@@ -145,7 +175,7 @@ export const COMPARISON_COLUMNS: ComparisonColumn[] = [
         sources: [LEADRESCUE_PRICING],
       },
       setup: {
-        text: "$99 once, for forwarding guidance, quiet hours, owner alerts, and the first calendar connection. Waived on the founding pilot.",
+        text: `List plans include a $99 setup fee once, for forwarding guidance, quiet hours, owner alerts, and the first calendar connection. Founding-pilot shops pay no subscription fee and no $99 setup fee during the first ${FOUNDING_FREE_MONTHS} months.`,
         sources: [LEADRESCUE_PRICING],
       },
       focus: {

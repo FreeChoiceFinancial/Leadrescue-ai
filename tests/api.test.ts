@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { demoTenant } from "@/lib/demo/tenant";
 import { handleFollowUpCron, handleSmsWebhook, handleStripeWebhook, handleVoiceWebhook, handleWeeklyReportCron } from "@/lib/http/webhooks";
 import { blankWorkspace } from "@/lib/engine/workspace";
@@ -29,6 +29,10 @@ function formRequest(path: string, fields: Record<string, string>, headers: Reco
 }
 
 describe("webhook routes", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it("rejects unsigned Twilio webhooks when credentials are absent", async () => {
     delete process.env.TWILIO_ACCOUNT_SID;
     delete process.env.TWILIO_AUTH_TOKEN;
@@ -39,6 +43,8 @@ describe("webhook routes", () => {
   });
 
   it("texts back for a missed call and keeps the other tenant untouched", async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-06-15T18:00:00Z"));
     delete process.env.TWILIO_ACCOUNT_SID;
     delete process.env.TWILIO_AUTH_TOKEN;
     delete process.env.OPENAI_API_KEY;

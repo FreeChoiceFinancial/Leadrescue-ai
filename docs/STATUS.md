@@ -4,7 +4,8 @@ Snapshot for the MVP in this repository. No production accounts are connected he
 
 ## Done
 
-- Public marketing site with sourced cost and missed-call figures, a comparison page, a founding pilot for the first 5 HVAC shops, pricing, FAQ, and draft privacy and terms.
+- Public marketing site with sourced cost and missed-call figures, a comparison page, pricing, FAQ, and draft privacy and terms.
+- Founding pilot for the first 5 HVAC shops: 3 months with no subscription fee and no $99 setup fee, then 25% off list for 2 years (Starter $149.25, Growth $299.25, Premium $524.25 per month). Month to month, cancel anytime. A review is optional and is not required for the discount.
 - Fictional `/demo` path from missed call to booked appointment, including gas-smell escalation and STOP. It does not call Twilio.
 - Sandbox dashboard for Demo HVAC Co: leads, a lead thread, appointments, activity, consent log, weekly report, billing, and settings.
 - Onboarding wizard. Without Supabase it stores a profile cookie and does not create a login.
