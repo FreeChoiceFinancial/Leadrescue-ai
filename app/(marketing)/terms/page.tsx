@@ -14,11 +14,11 @@ export default function TermsPage() {
       <h2 className="font-display text-2xl text-ink">Your responsibilities</h2>
       <p>You provide a number you control, complete your own A2P 10DLC brand and campaign, keep quiet hours accurate, and only enable live sending after carrier approval. You are responsible for the calls you forward and for honoring opt-outs. You will not upload purchased lists.</p>
       <h2 className="font-display text-2xl text-ink">Plans and fees</h2>
-      <p>Public prices are Starter $199, Growth $399, and Premium $699 per month, a $99 setup fee, and $0.50 per conversation over the plan allowance. Service is month to month. A 14-day trial applies as described at signup. Taxes and carrier fees are extra. Stripe test mode does not collect real funds.</p>
+      <p>Public prices are Starter $199, Growth $399, and Premium $699 per month, a $99 setup fee, and $0.50 per conversation over the plan allowance. Service is month to month. A 14-day trial applies as described at signup. The founding pilot, for the first 5 HVAC shops that sign up with that flag, waives the first month and the setup fee and locks the monthly price of the plan they start on. A review or case study is optional and is not a condition of that price. Taxes and carrier fees are extra. Stripe test mode does not collect real funds.</p>
       <h2 className="font-display text-2xl text-ink">Acceptable use</h2>
       <p>You will not use the product to deceive callers, hide the business identity, evade STOP, or message outside the consent described in the compliance notes. We may suspend live sending if a campaign is rejected or complaint rates spike.</p>
       <h2 className="font-display text-2xl text-ink">Disclaimers</h2>
-      <p>The product is provided as available. Appointment slots are only as accurate as the calendar you connect. Sandbox and demo data are fictional. The $360 repair example on the homepage is illustrative, not a forecast.</p>
+      <p>The product is provided as available. Appointment slots are only as accurate as the calendar you connect. Sandbox and demo data are fictional. The $360 figure on the homepage is HomeGuide’s published national average for AC repair. It is a cost benchmark. Your jobs will differ.</p>
       <h2 className="font-display text-2xl text-ink">Liability</h2>
       <p>Counsel should set a liability cap, exclusions, and the governing state before launch. Until that review, do not treat this draft as the contract you sell under.</p>
     </article>

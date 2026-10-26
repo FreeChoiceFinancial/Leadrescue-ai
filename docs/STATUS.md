@@ -4,7 +4,7 @@ Snapshot for the MVP in this repository. No production accounts are connected he
 
 ## Done
 
-- Public marketing site with the $360 illustrative repair versus $199 Starter offer, pricing, FAQ, and draft privacy and terms.
+- Public marketing site with sourced cost and missed-call figures, a comparison page, a founding pilot for the first 5 HVAC shops, pricing, FAQ, and draft privacy and terms.
 - Fictional `/demo` path from missed call to booked appointment, including gas-smell escalation and STOP. It does not call Twilio.
 - Sandbox dashboard for Demo HVAC Co: leads, a lead thread, appointments, activity, consent log, weekly report, billing, and settings.
 - Onboarding wizard. Without Supabase it stores a profile cookie and does not create a login.

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 
-export function SignupForm({ configured, plan }: { configured: boolean; plan: string }) {
+export function SignupForm({ configured, plan, foundingPilot = false }: { configured: boolean; plan: string; foundingPilot?: boolean }) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -18,7 +18,10 @@ export function SignupForm({ configured, plan }: { configured: boolean; plan: st
     const password = String(form.get("password") ?? "");
     const name = String(form.get("business") ?? "");
     if (!configured) {
-      window.sessionStorage.setItem("lr_signup_draft", JSON.stringify({ email, name, plan, mode: "sandbox" }));
+      window.sessionStorage.setItem(
+        "lr_signup_draft",
+        JSON.stringify({ email, name, plan, mode: "sandbox", foundingPilot }),
+      );
       router.push("/onboarding");
       return;
     }
@@ -32,7 +35,10 @@ export function SignupForm({ configured, plan }: { configured: boolean; plan: st
     const { error: signError } = await supabase.auth.signUp({
       email,
       password,
-      options: { emailRedirectTo: redirect, data: { business_name: name } },
+      options: {
+        emailRedirectTo: redirect,
+        data: { business_name: name, ...(foundingPilot ? { founding_pilot: true } : {}) },
+      },
     });
     if (signError) {
       setError(signError.message);
@@ -44,6 +50,11 @@ export function SignupForm({ configured, plan }: { configured: boolean; plan: st
 
   return (
     <form onSubmit={onSubmit} className="space-y-4 rounded-3xl border border-ink/10 bg-cream p-6">
+      {foundingPilot ? (
+        <p className="rounded-2xl bg-[#e4f3ea] px-3 py-2 text-sm">
+          Founding pilot flag is on. The discount does not depend on a review.
+        </p>
+      ) : null}
       {!configured ? (
         <p className="rounded-2xl bg-[#fde8d8] px-3 py-2 text-sm">
           Sandbox signup. Supabase Auth is not configured, so this does not create a login and the password is not stored.
@@ -62,6 +73,7 @@ export function SignupForm({ configured, plan }: { configured: boolean; plan: st
         <input className="field mt-1" name="business" required minLength={2} placeholder="Northwind HVAC" />
       </label>
       <input type="hidden" name="plan" value={plan} />
+      <input type="hidden" name="offer" value={foundingPilot ? "founding-pilot" : ""} />
       {error ? <p className="text-sm text-stamp">{error}</p> : null}
       <button className="btn btn-primary w-full" type="submit" disabled={pending}>
         {pending ? "Starting…" : configured ? "Create account" : "Continue in sandbox"}

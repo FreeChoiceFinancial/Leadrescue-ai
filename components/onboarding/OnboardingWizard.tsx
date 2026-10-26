@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 const STEPS = ["Business", "Hours", "Alerts", "Review"];
@@ -11,6 +11,7 @@ export function OnboardingWizard({ configured }: { configured: boolean }) {
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [done, setDone] = useState<"sandbox" | "live" | null>(null);
+  const [foundingPilot, setFoundingPilot] = useState(false);
   const [form, setForm] = useState({
     name: "Northwind HVAC",
     timezone: "America/Chicago",
@@ -22,6 +23,17 @@ export function OnboardingWizard({ configured }: { configured: boolean }) {
     physicalAddress: "400 Fictional St, Austin, TX 78702",
     smsFromNumber: "",
   });
+
+  useEffect(() => {
+    try {
+      const raw = window.sessionStorage.getItem("lr_signup_draft");
+      if (!raw) return;
+      const draft = JSON.parse(raw) as { foundingPilot?: boolean };
+      setFoundingPilot(Boolean(draft.foundingPilot));
+    } catch {
+      setFoundingPilot(false);
+    }
+  }, []);
 
   function update(partial: Partial<typeof form>) {
     setForm((current) => ({ ...current, ...partial }));
@@ -69,6 +81,9 @@ export function OnboardingWizard({ configured }: { configured: boolean }) {
       </p>
       {!configured ? (
         <p className="mt-3 text-sm text-ink/70">Sandbox onboarding. Nothing is written to Supabase.</p>
+      ) : null}
+      {foundingPilot ? (
+        <p className="mt-3 text-sm text-ink/70">Founding pilot flag is on for this signup. A review is not required.</p>
       ) : null}
       <div className="mt-5 space-y-4">
         {step === 0 ? (

@@ -2,6 +2,8 @@ import Link from "next/link";
 
 const links = [
   ["How it works", "/#how"],
+  ["Why it matters", "/#why"],
+  ["Compare", "/compare"],
   ["Pricing", "/pricing"],
   ["FAQ", "/faq"],
   ["Demo", "/demo"],
