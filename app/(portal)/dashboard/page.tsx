@@ -16,6 +16,12 @@ export default async function DashboardPage() {
     <div>
       <p className="text-xs font-bold uppercase tracking-[0.16em] text-copper">{view === "fresh" ? "New shop" : "This week"}</p>
       <h1 className="mt-2 font-display text-4xl">{workspace.tenant.name}</h1>
+      <p className="mt-3 max-w-xl text-sm leading-relaxed text-ink/75">
+        <Link href="/onboarding/10dlc" className="font-semibold underline">
+          Register A2P 10DLC
+        </Link>{" "}
+        for this shop before any live texts. Saving the form does not file it with the carriers.
+      </p>
       <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {[
           ["Leads handled", String(metrics.leadsHandled)],

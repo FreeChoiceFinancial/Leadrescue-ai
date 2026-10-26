@@ -10,6 +10,7 @@ const LINKS = [
   ["/dashboard/activity", "Activity"],
   ["/dashboard/reports", "Weekly report"],
   ["/dashboard/billing", "Billing"],
+  ["/onboarding/10dlc", "10DLC"],
   ["/dashboard/settings", "Settings"],
 ];
 

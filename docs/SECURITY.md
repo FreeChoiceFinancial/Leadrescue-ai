@@ -18,6 +18,8 @@
 - User A cannot rename User B's tenant.
 - User A cannot raise their conversation allowance.
 - User A cannot self-approve A2P.
+- User A cannot read another shop's 10DLC registration or mark their own registration submitted, approved, or rejected. A customer update stays `pending_review`.
+- 10DLC responses, cookies, and error text do not include the EIN. The UI shows a mask.
 - User A can rename their own shop.
 - `anon` sees nothing.
 - `service_role` can read both tenants, which is how webhooks work.

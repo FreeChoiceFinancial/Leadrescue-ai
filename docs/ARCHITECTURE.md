@@ -57,6 +57,7 @@ Every external system has a mode:
 | Google Calendar | Client id, secret, and refresh token, and the shop selected Google | Demo openings, labeled sandbox |
 | Email | Resend key and from-address | Escalation text is stored, not delivered |
 | Stripe | `sk_test_` key | Checkout explains sandbox and creates no session. `sk_live_` is refused |
+| A2P Trust Hub | Never in this build | `/onboarding/10dlc` stores a review request. `A2P_SUBMIT_LIVE` is off, and demo mode forces sandbox. No Twilio Trust Hub call is made |
 
 The interactive demo at `/demo` never calls Twilio. It runs the same engine in the browser with `delivery: sandbox_not_sent`.
 

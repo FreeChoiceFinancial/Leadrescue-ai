@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { FAQS } from "@/lib/marketing/faq";
 
 export const metadata: Metadata = { title: "FAQ" };
@@ -14,6 +15,11 @@ export default function FaqPage() {
               {item.q}
             </summary>
             <p className="mt-2 text-sm leading-relaxed text-ink/75">{item.a}</p>
+            {"href" in item && item.href ? (
+              <Link href={item.href} className="mt-2 inline-block text-sm font-semibold underline">
+                {item.linkLabel}
+              </Link>
+            ) : null}
           </details>
         ))}
       </div>

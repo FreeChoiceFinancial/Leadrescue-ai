@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FOUNDING_PILOT } from "@/lib/marketing/trust";
 
@@ -65,7 +66,12 @@ export function OnboardingWizard({ configured }: { configured: boolean }) {
         <h2 className="mt-4 font-display text-3xl">Forward no-answer calls, then wait.</h2>
         <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-ink/80">
           <li>On the shop phone, set conditional forwarding for no-answer to your LeadRescue number.</li>
-          <li>Register that number under this business&apos;s own A2P 10DLC brand. Live texts stay blocked until an operator marks the brand approved.</li>
+          <li>
+            <Link href="/onboarding/10dlc" className="font-semibold underline">
+              Register A2P 10DLC
+            </Link>{" "}
+            for this business&apos;s own brand. The form does not file the registration. Live texts stay blocked until an operator marks the brand approved.
+          </li>
           <li>Connect Google Calendar when you want real free/busy. Until then, bookings are labeled sandbox.</li>
         </ol>
         <button className="btn btn-primary mt-6" type="button" onClick={() => router.push("/dashboard")}>

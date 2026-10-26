@@ -28,6 +28,12 @@ export const FAQS = [
     a: "The shop's own number, after that shop's A2P 10DLC brand and campaign are approved. LeadRescue does not share one campaign across customers.",
   },
   {
+    q: "How do I register A2P 10DLC?",
+    a: "Each shop registers its own brand and campaign. The form collects the legal business details, sample messages, the missed-call opt-in, and STOP and HELP text. Saving the form does not file anything. We review it, then submit it to the carriers. Approval typically takes days to weeks.",
+    href: "/onboarding/10dlc",
+    linkLabel: "Open the 10DLC form",
+  },
+  {
     q: "What if the caller smells gas?",
     a: "The assistant stops booking, tells them to leave and call 911 if there is gas, smoke, or a CO alarm, and notifies the owner by SMS and email. This is not a life-safety monitoring service.",
   },

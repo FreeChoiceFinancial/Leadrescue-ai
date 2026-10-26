@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { PGlite } from "@electric-sql/pglite";
 import { describe, expect, it } from "vitest";
@@ -8,8 +8,13 @@ const USER_B = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbb2";
 
 async function database() {
   const db = new PGlite();
-  const sql = readFileSync(path.join(process.cwd(), "supabase/migrations/20261025120000_init.sql"), "utf8");
-  await db.exec(sql);
+  const directory = path.join(process.cwd(), "supabase/migrations");
+  const files = readdirSync(directory)
+    .filter((file) => file.endsWith(".sql"))
+    .sort();
+  for (const file of files) {
+    await db.exec(readFileSync(path.join(directory, file), "utf8"));
+  }
   await db.exec(`select set_config('request.jwt.claim.sub', '${USER_A}', false)`);
   await db.exec(`
     select app.bootstrap_tenant(
@@ -109,5 +114,53 @@ describe("tenant row level security", () => {
     }
     const count = await db.query<{ n: string }>("select count(*)::text as n from public.memberships where tenant_id = $1", [northId]);
     expect(Number(count.rows[0]?.n)).toBe(26);
+  });
+
+  it("keeps 10DLC registrations inside the shop and pending review", async () => {
+    const { db, northId, southId } = await database();
+    const insertSql = `
+      insert into public.a2p_registrations (
+        tenant_id, legal_business_name, ein, business_type,
+        street, city, region, postal_code, website,
+        contact_name, contact_email, contact_phone, vertical, use_case,
+        campaign_description, sample_messages, opt_in_description, stop_message, help_message,
+        attested, status
+      ) values (
+        $1, 'Northwind HVAC LLC', '12-3456789', 'Limited Liability Corporation',
+        '10 Fictional St', 'Austin', 'TX', '78701', 'https://northwind.example',
+        'Ada Owner', 'owner-a@example.com', '+15125551011', 'CONSTRUCTION', 'customer_care',
+        'Customer care texts for people who called this HVAC shop and were not answered. Not a promotion.',
+        array[
+          'Northwind HVAC: We missed your call. Reply STOP to opt out. Reply HELP for help.',
+          'Northwind HVAC: Reply with the HVAC issue and your ZIP. Reply STOP to opt out.'
+        ]::text[],
+        'The person called the shop, the call was missed, and the shop texts that caller about the missed call with STOP and HELP.',
+        'Northwind HVAC: You are opted out. Reply START to opt back in.',
+        'Northwind HVAC: Help for missed-call texts. Reply STOP to opt out. Help: the shop.',
+        true,
+        'approved'
+      )
+    `;
+    await asUser(db, USER_A);
+    await db.query(insertSql, [northId]);
+    const own = await db.query<{ status: string; ein_last4: string }>(
+      "select status, ein_last4 from public.a2p_registrations where tenant_id = $1",
+      [northId],
+    );
+    expect(own.rows).toEqual([{ status: "pending_review", ein_last4: "6789" }]);
+    await db.query("update public.a2p_registrations set status = 'approved' where tenant_id = $1", [northId]);
+    const stillPending = await db.query<{ status: string }>("select status from public.a2p_registrations where tenant_id = $1", [northId]);
+    expect(stillPending.rows[0]?.status).toBe("pending_review");
+    await expect(db.query(insertSql, [southId])).rejects.toThrow(/row-level security/i);
+
+    await asUser(db, USER_B);
+    const other = await db.query("select ein, status from public.a2p_registrations");
+    expect(other.rows).toHaveLength(0);
+
+    await db.exec("reset role");
+    await db.exec("set role service_role");
+    await db.query("update public.a2p_registrations set status = 'submitted' where tenant_id = $1", [northId]);
+    const filed = await db.query<{ status: string }>("select status from public.a2p_registrations where tenant_id = $1", [northId]);
+    expect(filed.rows[0]?.status).toBe("submitted");
   });
 });

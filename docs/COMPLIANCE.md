@@ -19,6 +19,9 @@ Counsel needs to decide whether a missed call is prior express consent for this 
 ## A2P 10DLC
 
 - Each customer registers their own brand and campaign. LeadRescue does not put every shop on one shared campaign.
+- `/onboarding/10dlc` collects the brand and campaign details, including the EIN, samples, the missed-call opt-in, and STOP/HELP copy. The owner attests the information and authorizes LeadRescue AI to submit it later.
+- Saving that form stores `pending_review`. It does not file anything with Twilio or the carriers. `A2P_SUBMIT_LIVE` is off, demo mode forces sandbox, and this build never calls Trust Hub.
+- The EIN is stored on the tenant registration row. Do not log it. The UI shows only the last four digits.
 - The shop's sending number is stored on the tenant. Live sends require `a2p_brand_status = approved`.
 - That status cannot be flipped from the customer dashboard. An operator sets it after the carrier approves the campaign.
 - Until then, messages are stored as `blocked_a2p` or `sandbox_not_sent` and are not handed to Twilio.

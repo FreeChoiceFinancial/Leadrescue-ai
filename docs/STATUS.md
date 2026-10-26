@@ -9,6 +9,7 @@ Snapshot for the MVP in this repository. No production accounts are connected he
 - Fictional `/demo` path from missed call to booked appointment, including gas-smell escalation and STOP. It does not call Twilio.
 - Sandbox dashboard for Demo HVAC Co: leads, a lead thread, appointments, activity, consent log, weekly report, billing, and settings.
 - Onboarding wizard. Without Supabase it stores a profile cookie and does not create a login.
+- A2P 10DLC form at `/onboarding/10dlc`, linked from the dashboard and the FAQ. It stores a tenant-scoped review request (`pending_review`, `submitted`, `approved`, `rejected`). The Trust Hub adapter does not call Twilio. EINs are masked in the UI.
 - Domain engine: informational missed-call text, quiet hours, STOP/HELP/START, qualification, three follow-ups after YES, emergency and frustration escalation.
 - Booking provider interface, demo slots, and a Google Calendar free/busy implementation that stays in sandbox without credentials.
 - Stripe test-mode checkout, customer portal, webhook snapshot sync, $99 setup, $0.50 overage, 14-day trial. Month-to-month is Starter $199, Growth $399, Premium $699. Annual is a 12-month commitment at $124, $249, and $437 per month ($1,488, $2,988, and $5,244 per year). Live secret keys are refused, and the app does not create Stripe products.
@@ -19,7 +20,7 @@ Snapshot for the MVP in this repository. No production accounts are connected he
 ## Blockers before a real shop can go live
 
 - No Supabase project is linked. Auth, the database, and RLS are unused until you create one and apply the migration.
-- No Twilio account, no 10DLC brand, and no campaign. Live SMS stays blocked until `a2p_brand_status` is approved.
+- No Twilio account, no 10DLC brand, and no campaign. The form collects a review packet, and live SMS stays blocked until `a2p_brand_status` is approved. Trust Hub filing is not automated.
 - No Stripe test products or webhook endpoint.
 - No Google OAuth refresh token.
 - The public demo must set `DEMO_MODE=true`. The assistant stays on the script unless that flag is off and `LLM_LIVE=true`. An injected `OPENAI_API_KEY` is not treated as live.
