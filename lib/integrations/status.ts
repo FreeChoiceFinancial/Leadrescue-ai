@@ -10,6 +10,7 @@ export type IntegrationStatus = {
   google: "live" | "sandbox";
   email: "live" | "sandbox";
   stripe: "test" | "sandbox" | "refused";
+  a2p: "sandbox";
 };
 
 export function supabaseConfigured(): boolean {
@@ -35,6 +36,7 @@ export function integrationStatus(): IntegrationStatus {
     google: googleCredentialsPresent() ? "live" : "sandbox",
     email: process.env.RESEND_API_KEY && process.env.EMAIL_FROM ? "live" : "sandbox",
     stripe,
+    a2p: "sandbox",
   };
 }
 

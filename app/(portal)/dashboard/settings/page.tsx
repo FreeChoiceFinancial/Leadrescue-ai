@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { integrationStatus } from "@/lib/integrations/status";
 import { getPortalModel } from "@/lib/portal/load";
 import { StatusChip } from "@/components/portal/StatusChip";
@@ -32,7 +33,10 @@ export default async function SettingsPage() {
           A2P 10DLC: <StatusChip value={tenant.a2pBrandStatus} />
         </p>
         <p className="mt-2 text-sm text-ink/70">
-          Approval is recorded by an operator after the carrier approves this shop&apos;s own brand. The dashboard cannot flip it to approved.
+          <Link href="/onboarding/10dlc" className="font-semibold underline">
+            Open the 10DLC form
+          </Link>
+          . Approval is recorded by an operator after the carrier approves this shop&apos;s own brand. The dashboard cannot flip it to approved, and the form does not file the registration.
         </p>
       </section>
       <section className="rounded-3xl bg-cream p-5">

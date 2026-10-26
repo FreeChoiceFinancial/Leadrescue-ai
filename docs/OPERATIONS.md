@@ -14,7 +14,7 @@ Copy `.env.example` to `.env.local` only when you are ready to connect a real se
 
 ## Apply the database
 
-The schema is `supabase/migrations/20261025120000_init.sql`.
+The schema is `supabase/migrations/20261025120000_init.sql` plus later files in that folder, including `20261026120000_a2p_registrations.sql`. Apply them in filename order.
 
 On a hosted Supabase project, run it with the SQL editor or the Supabase CLI against that project. Then in Authentication → URL configuration, allow `https://<your-domain>/auth/callback`.
 
@@ -31,6 +31,7 @@ For each shop:
 5. Set `TWILIO_VOICE_WEBHOOK_URL` and `TWILIO_SMS_WEBHOOK_URL` to those exact URLs. Signature checks use them.
 6. On the shop's business line, enable conditional forwarding on no-answer to that Twilio number.
 7. Leave `a2p_brand_status` at `not_started` or `pending` until the campaign is approved. An operator updates it with the service role. The app will not send live SMS before that.
+8. The shop fills `/onboarding/10dlc`. That stores a `pending_review` row and does not call Twilio. Leave `A2P_SUBMIT_LIVE` unset. Demo mode sandboxes the adapter even if the flag is set. An operator submits the brand and campaign in Trust Hub after review, then sets the registration status with the service role.
 
 ## Stripe test mode
 

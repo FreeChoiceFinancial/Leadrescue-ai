@@ -20,6 +20,7 @@ Then open:
 - `/pricing`, `/faq`, `/privacy`, `/terms`
 - `/demo` fictional Demo HVAC Co thread (no Twilio, no card, no calendar write)
 - `/signup` and `/onboarding`
+- `/onboarding/10dlc` A2P registration form (review only; it does not file with Twilio)
 - `/dashboard` sandbox portal with sample leads
 
 Without credentials every integration stays in a labeled sandbox. Copy `.env.example` to `.env.local` when you connect Supabase, Twilio, Stripe test mode, Google Calendar, an LLM, or email. Do not commit secrets. This repo is public.
