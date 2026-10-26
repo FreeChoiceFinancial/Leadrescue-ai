@@ -98,4 +98,16 @@ describe("tenant row level security", () => {
       `),
     ).rejects.toThrow(/already has a business/i);
   });
+
+  it("does not cap how many people can belong to one shop", async () => {
+    const { db, northId } = await database();
+    await db.exec("reset role");
+    await db.exec("set role service_role");
+    for (let index = 0; index < 25; index += 1) {
+      const userId = `cccccccc-cccc-4ccc-8ccc-${String(index).padStart(12, "0")}`;
+      await db.query("insert into public.memberships (tenant_id, user_id, role) values ($1, $2, 'staff')", [northId, userId]);
+    }
+    const count = await db.query<{ n: string }>("select count(*)::text as n from public.memberships where tenant_id = $1", [northId]);
+    expect(Number(count.rows[0]?.n)).toBe(26);
+  });
 });

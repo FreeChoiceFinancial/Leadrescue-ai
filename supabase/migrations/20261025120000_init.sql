@@ -79,6 +79,7 @@ create table public.subscriptions (
   updated_at timestamptz not null default now()
 );
 
+-- Team members. There is no seat cap and no per-user price. A login belongs to one shop.
 create table public.memberships (
   id uuid primary key default gen_random_uuid(),
   tenant_id uuid not null references public.tenants (id) on delete cascade,

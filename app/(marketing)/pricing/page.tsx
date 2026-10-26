@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FoundingPilot } from "@/components/marketing/FoundingPilot";
-import { PricingCards } from "@/components/marketing/PricingCards";
+import { PricingChooser } from "@/components/marketing/PricingChooser";
 import { OVERAGE_USD, SETUP_FEE_USD, TRIAL_DAYS } from "@/lib/billing/plans";
 import { usd } from "@/lib/format";
 
@@ -10,8 +10,8 @@ export const metadata: Metadata = { title: "Pricing" };
 export default function PricingPage() {
   return (
     <div className="mx-auto max-w-6xl px-6 py-16">
-      <p className="text-xs font-bold uppercase tracking-[0.18em] text-copper">Month to month</p>
-      <h1 className="mt-3 max-w-3xl font-display text-5xl leading-tight">Pay for the conversations you recover. Cancel when you want.</h1>
+      <p className="text-xs font-bold uppercase tracking-[0.18em] text-copper">Monthly or annual</p>
+      <h1 className="mt-3 max-w-3xl font-display text-5xl leading-tight">Pay for the conversations you recover.</h1>
       <p className="mt-4 max-w-2xl text-lg text-ink/75">
         Every plan includes a {TRIAL_DAYS}-day trial, a one-time {usd(SETUP_FEE_USD)} setup fee, and {usd(OVERAGE_USD)} for each conversation past the allowance. Ten extra conversations are {usd(OVERAGE_USD * 10)}.{" "}
         <Link href="/compare" className="link font-semibold text-copper">
@@ -20,7 +20,7 @@ export default function PricingPage() {
       </p>
       <FoundingPilot contained={false} />
       <div className="mt-10">
-        <PricingCards />
+        <PricingChooser />
       </div>
       <div className="mt-10 grid gap-4 md:grid-cols-3">
         {[

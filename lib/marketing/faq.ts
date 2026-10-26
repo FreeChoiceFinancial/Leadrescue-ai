@@ -1,3 +1,5 @@
+import { PAID_PLANS } from "@/lib/billing/plans";
+import { usd } from "@/lib/format";
 import { foundingPilotPlainText } from "@/lib/marketing/trust";
 
 export const FAQS = [
@@ -8,6 +10,10 @@ export const FAQS = [
   {
     q: "What does the first text say?",
     a: "It names the business, says the call was missed, says it is not a promotion, and includes Reply STOP to opt out and Reply HELP for help.",
+  },
+  {
+    q: "Can I add my team?",
+    a: "Yes, unlimited users on every plan; pricing is based on conversations, not seats.",
   },
   {
     q: "What is a conversation on the invoice?",
@@ -38,8 +44,12 @@ export const FAQS = [
     a: foundingPilotPlainText(),
   },
   {
+    q: "What does annual billing cost?",
+    a: `Annual is a 12-month commitment, billed once per year. Starter is ${usd(PAID_PLANS.starter.annualMonthlyUsd)} per month (${usd(PAID_PLANS.starter.annualYearlyUsd)} per year), Growth is ${usd(PAID_PLANS.growth.annualMonthlyUsd)} per month (${usd(PAID_PLANS.growth.annualYearlyUsd)} per year), and Premium is ${usd(PAID_PLANS.premium.annualMonthlyUsd)} per month (${usd(PAID_PLANS.premium.annualYearlyUsd)} per year). Month-to-month stays ${usd(PAID_PLANS.starter.monthlyUsd)}, ${usd(PAID_PLANS.growth.monthlyUsd)}, and ${usd(PAID_PLANS.premium.monthlyUsd)}, with no contract and cancel anytime. The month-to-month price is 60% higher than the annual per-month price.`,
+  },
+  {
     q: "How do I cancel?",
-    a: "Plans are month to month. The Stripe customer portal is where a live subscription is canceled. Sandbox mode never creates a charge.",
+    a: "Month-to-month plans have no contract and cancel anytime in the Stripe customer portal. Annual is a 12-month commitment. Sandbox mode never creates a charge.",
   },
   {
     q: "Are the privacy policy and terms final?",

@@ -2,7 +2,7 @@
 
 Missed-call recovery for US owner-operated HVAC companies with about 2–15 people. A no-answer forward hits Twilio, the caller gets an informational text, and the assistant qualifies the job and books an opening.
 
-The price is public and month to month: Starter $199 (150 conversations), Growth $399 (400), Premium $699 (1,000), a $99 setup fee, and $0.50 per extra conversation. HomeGuide’s published national average for an AC repair is $360, which covers Starter. That figure is a cost benchmark, and your tickets will differ.
+The month-to-month price is public, with no contract: Starter $199 (150 conversations), Growth $399 (400), Premium $699 (1,000), a $99 setup fee, and $0.50 per extra conversation. Annual is a 12-month commitment at Starter $124 per month ($1,488 per year), Growth $249 per month ($2,988 per year), and Premium $437 per month ($5,244 per year). HomeGuide’s published national average for an AC repair is $360, which covers Starter. That figure is a cost benchmark, and your tickets will differ.
 
 This repository is standalone. It does not depend on any other project.
 
