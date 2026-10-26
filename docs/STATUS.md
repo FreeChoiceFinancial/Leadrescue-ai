@@ -26,7 +26,7 @@ Snapshot for the MVP in this repository. No production accounts are connected he
 - No Google OAuth refresh token.
 - The public demo must set `DEMO_MODE=true`. The assistant stays on the script unless that flag is off and `LLM_LIVE=true`. An injected `OPENAI_API_KEY` is not treated as live.
 - No Resend mailbox.
-- Privacy policy and terms are drafts and still need a lawyer. The operator legal name and mailing address are placeholders.
+- Privacy policy and terms are drafts and still need a lawyer. The public mailing address, phone, and email are on the footer, privacy, terms, and SMS terms. The terms page still includes its original draft sentences.
 - Cron is documented and authenticated, but nothing schedules it until you add a scheduler in the host.
 - Counsel has not signed off on the missed-call consent theory.
 - The results guarantee is pending legal review. The public sentence is `RESULTS_GUARANTEE` in `lib/marketing/guarantee.ts`. `SHOW_GUARANTEE` defaults off, so the homepage, `/pricing`, the FAQ, the footer, and `/guarantee` hide it until the owner sets `SHOW_GUARANTEE=true`.

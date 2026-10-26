@@ -4,6 +4,7 @@ import {
   redactEinText,
   type A2pStatus,
 } from "@/lib/compliance/a2p-copy";
+import { smsConsentRecord } from "@/lib/compliance/sms-consent";
 import { submitA2pRegistration } from "@/lib/integrations/a2p-trust-hub";
 import { a2pIssueMessage, a2pRegistrationSchema, type A2pRegistration } from "@/lib/onboarding/a2p-schema";
 
@@ -23,6 +24,8 @@ export type A2pCookieView = {
   status: A2pStatus;
   einMasked: string;
   useCase: A2pRegistration["useCase"];
+  smsConsent: boolean;
+  smsConsentAt: string | null;
 };
 
 type SaveResult = { ok: true } | { ok: false };
@@ -34,7 +37,8 @@ export type A2pSubmitDeps = {
   setCookie: (name: string, value: string) => void | Promise<void>;
 };
 
-export function registrationRow(tenantId: string, input: A2pRegistration) {
+export function registrationRow(tenantId: string, input: A2pRegistration, at: Date = new Date()) {
+  const consent = smsConsentRecord(input.smsConsent, at);
   return {
     tenant_id: tenantId,
     legal_business_name: input.legalBusinessName,
@@ -58,6 +62,8 @@ export function registrationRow(tenantId: string, input: A2pRegistration) {
     help_message: input.helpMessage,
     attested: true,
     status: "pending_review" as const,
+    sms_consent: consent.smsConsent,
+    sms_consent_at: consent.smsConsentAt,
   };
 }
 
@@ -72,12 +78,15 @@ export function publicReceipt(input: A2pRegistration): A2pReceipt {
   };
 }
 
-export function sandboxCookieValue(input: A2pRegistration): string {
+export function sandboxCookieValue(input: A2pRegistration, at: Date = new Date()): string {
+  const consent = smsConsentRecord(input.smsConsent, at);
   const view: A2pCookieView = {
     legalBusinessName: input.legalBusinessName,
     status: "pending_review",
     einMasked: maskEin(input.ein),
     useCase: input.useCase,
+    smsConsent: consent.smsConsent,
+    smsConsentAt: consent.smsConsentAt,
   };
   return JSON.stringify(view);
 }
@@ -92,11 +101,14 @@ export function parseStoredA2p(raw: string | null | undefined): A2pCookieView | 
     const status = parsed.status;
     if (status !== "pending_review" && status !== "submitted" && status !== "approved" && status !== "rejected") return null;
     if (parsed.useCase !== "customer_care" && parsed.useCase !== "mixed") return null;
+    const smsConsent = parsed.smsConsent === true;
     return {
       legalBusinessName: parsed.legalBusinessName,
       status,
       einMasked,
       useCase: parsed.useCase,
+      smsConsent,
+      smsConsentAt: smsConsent && typeof parsed.smsConsentAt === "string" ? parsed.smsConsentAt : null,
     };
   } catch {
     return null;

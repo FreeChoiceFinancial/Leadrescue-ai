@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { BrandContact } from "@/components/marketing/BrandContact";
 import { LegalBanner } from "@/components/marketing/LegalBanner";
 import { OVERAGE_USD, PAID_PLANS, SETUP_FEE_USD } from "@/lib/billing/plans";
 import { usd } from "@/lib/format";
@@ -11,6 +12,7 @@ export default function TermsPage() {
     <article className="mx-auto max-w-3xl space-y-6 px-6 py-16 text-sm leading-relaxed text-ink/80">
       <h1 className="font-display text-5xl text-ink">Terms of service</h1>
       <LegalBanner />
+      <BrandContact />
       <p>These terms are a draft between [Operator legal name — complete before launch] and the HVAC business that creates an account. They are not an offer to consumers who text the shop.</p>
       <h2 className="font-display text-2xl text-ink">The service</h2>
       <p>LeadRescue sends informational texts after missed calls, qualifies repair, maintenance, and install requests, offers appointment times, and notifies the owner of emergencies or frustrated callers. It does not dispatch technicians, guarantee revenue, or replace 911.</p>

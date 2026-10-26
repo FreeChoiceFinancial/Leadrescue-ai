@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { SmsConsentCheckbox } from "@/components/marketing/SmsConsentCheckbox";
 import { FOUNDING_PILOT } from "@/lib/marketing/trust";
 
 const STEPS = ["Business", "Hours", "Alerts", "Review"];
@@ -24,6 +25,7 @@ export function OnboardingWizard({ configured }: { configured: boolean }) {
     ownerNotifyEmail: "owner@northwind.example",
     physicalAddress: "400 Fictional St, Austin, TX 78702",
     smsFromNumber: "",
+    smsConsent: false,
   });
 
   useEffect(() => {
@@ -97,6 +99,7 @@ export function OnboardingWizard({ configured }: { configured: boolean }) {
           <>
             <Field label="Business name" value={form.name} onChange={(name) => update({ name })} />
             <Field label="Business phone" value={form.businessPhone} onChange={(businessPhone) => update({ businessPhone })} />
+            <SmsConsentCheckbox checked={form.smsConsent} onChange={(smsConsent) => update({ smsConsent })} />
           </>
         ) : null}
         {step === 1 ? (

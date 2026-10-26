@@ -77,6 +77,7 @@ export const a2pRegistrationSchema = z.object({
   attested: z.literal(true, {
     errorMap: () => ({ message: "Check the box to attest the information is accurate and to authorize the submission." }),
   }),
+  smsConsent: z.boolean().optional().default(false),
 });
 
 export type A2pRegistration = z.infer<typeof a2pRegistrationSchema>;

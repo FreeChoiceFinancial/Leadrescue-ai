@@ -10,6 +10,7 @@ export const onboardingSchema = z.object({
   quietHoursEnd: z.number().int().min(0).max(23),
   physicalAddress: z.string().trim().min(8).max(180),
   smsFromNumber: z.string().trim().min(7).max(20).optional().or(z.literal("")),
+  smsConsent: z.boolean().optional().default(false),
 });
 
 export type OnboardingInput = z.infer<typeof onboardingSchema>;

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandContact } from "@/components/marketing/BrandContact";
 import { BRAND_LINE } from "@/lib/brand";
 import { showGuarantee } from "@/lib/marketing/guarantee";
 
@@ -12,6 +13,9 @@ export function SiteFooter() {
             Missed-call recovery for owner-operated HVAC companies. Month to month, with the price on the page.
           </p>
           <p className="mt-3 text-sm text-cream/80">{BRAND_LINE}</p>
+          <div className="mt-4 text-cream/90">
+            <BrandContact className="text-sm leading-relaxed text-cream" />
+          </div>
         </div>
         <div className="text-sm">
           <p className="font-semibold text-cream/60">Product</p>
@@ -21,6 +25,7 @@ export function SiteFooter() {
             <Link href="/#founding">Founding pilot</Link>
             <Link href="/demo">Interactive demo</Link>
             <Link href="/faq">FAQ</Link>
+            <Link href="/contact">Contact</Link>
             <Link href="/signup">Trial signup</Link>
           </div>
         </div>
@@ -29,6 +34,7 @@ export function SiteFooter() {
           <div className="mt-3 flex flex-col gap-2">
             <Link href="/privacy">Privacy policy</Link>
             <Link href="/terms">Terms of service</Link>
+            <Link href="/sms-terms">SMS terms</Link>
             {showGuarantee() ? <Link href="/guarantee">Results guarantee</Link> : null}
           </div>
           <p className="mt-4 text-cream/60">Policies are drafts and need legal review before launch.</p>

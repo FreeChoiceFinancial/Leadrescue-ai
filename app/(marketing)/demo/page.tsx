@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DemoConsole } from "@/components/demo/DemoConsole";
+import { PhoneOptInForm } from "@/components/marketing/PhoneOptInForm";
 
 export const metadata: Metadata = { title: "Demo" };
 
@@ -16,6 +17,16 @@ export default function DemoPage() {
       <div className="mt-8">
         <DemoConsole />
       </div>
+      <section className="mt-12 max-w-xl">
+        <h2 className="font-display text-3xl">Ask for a text about your inquiry</h2>
+        <p className="mt-2 text-sm leading-relaxed text-ink/70">
+          This form is separate from the fictional demo above. It records a phone number and an optional SMS consent. It
+          does not send a message and does not call the assistant.
+        </p>
+        <div className="mt-4">
+          <PhoneOptInForm source="demo" />
+        </div>
+      </section>
     </div>
   );
 }
