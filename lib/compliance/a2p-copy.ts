@@ -1,4 +1,4 @@
-import { BRAND_ENTITY_NAME } from "@/lib/brand";
+import { BRAND_EMAIL, BRAND_ENTITY_NAME } from "@/lib/brand";
 import { missedCallText } from "@/lib/compliance/messages";
 
 /** Twilio US A2P campaign field limits used by the form and the database. */
@@ -86,7 +86,7 @@ export function defaultStopMessage(businessName: string): string {
 
 export function defaultHelpMessage(businessName: string): string {
   const name = businessName.trim() || "Your shop";
-  return `${name}: Help for texts about a missed call to this shop. Message frequency varies. Reply STOP to opt out. For gas, smoke, or a CO alarm, leave and call 911.`;
+  return `${name}: Help for texts about a missed call to this shop. Message frequency varies. Reply STOP to opt out. Email ${BRAND_EMAIL}. For gas, smoke, or a CO alarm, leave and call 911.`;
 }
 
 /** Last four digits only. The full EIN never belongs in the UI. */

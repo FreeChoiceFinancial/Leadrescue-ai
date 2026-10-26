@@ -1,7 +1,10 @@
 /** Operating company. Change the entity name here only. */
 export const BRAND_ENTITY_NAME = "Pollack Resilience LLC";
 
-export const BRAND_EMAIL = "Pollackresilience.llc@gmail.com";
+export const BRAND_EMAIL = "hello@leadrescue.cloud";
+
+/** Public site. Metadata, the sitemap, and Open Graph use this origin. */
+export const BRAND_SITE_URL = "https://leadrescue.cloud";
 
 /** Public display. The tel link uses BRAND_PHONE_E164. */
 export const BRAND_PHONE_DISPLAY = "(256) 286-5957";

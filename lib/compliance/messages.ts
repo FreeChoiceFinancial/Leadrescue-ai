@@ -1,3 +1,4 @@
+import { BRAND_EMAIL } from "@/lib/brand";
 import type { Tenant } from "@/lib/domain/types";
 
 /** First-touch copy is informational. It names the business and offers STOP. */
@@ -7,7 +8,7 @@ export function missedCallText(tenant: Pick<Tenant, "name">): string {
 
 export function helpText(tenant: Pick<Tenant, "name" | "ownerNotifyPhone" | "ownerNotifyEmail">): string {
   const contact = tenant.ownerNotifyPhone ?? tenant.ownerNotifyEmail ?? "the shop";
-  return `${tenant.name}: LeadRescue sends texts only after a missed call to this shop. Message frequency varies based on your replies, with at most 3 follow-ups if you allow them. Reply STOP to opt out. For a gas leak, smoke, or CO alarm, leave and call 911. Help: ${contact}.`;
+  return `${tenant.name}: LeadRescue sends texts only after a missed call to this shop. Message frequency varies based on your replies, with at most 3 follow-ups if you allow them. Reply STOP to opt out. For a gas leak, smoke, or CO alarm, leave and call 911. Help: ${contact}. Email ${BRAND_EMAIL}.`;
 }
 
 export function stopText(tenant: Pick<Tenant, "name">): string {
