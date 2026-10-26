@@ -58,6 +58,7 @@ Every external system has a mode:
 | Email | Resend key and from-address | Escalation text is stored, not delivered |
 | Stripe | `sk_test_` key | Checkout explains sandbox and creates no session. `sk_live_` is refused |
 | A2P Trust Hub | Never in this build | `/onboarding/10dlc` stores a review request. `A2P_SUBMIT_LIVE` is off, and demo mode forces sandbox. No Twilio Trust Hub call is made |
+| HubSpot and Zoho | `CRM_LIVE=true`, a token key, OAuth client credentials, and demo mode off | Settings say `Coming soon / sandbox`. No CRM request is made |
 
 The interactive demo at `/demo` never calls Twilio. It runs the same engine in the browser with `delivery: sandbox_not_sent`.
 

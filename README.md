@@ -35,6 +35,7 @@ Without credentials every integration stays in a labeled sandbox. Copy `.env.exa
 | Assistant | Script by default. Live wording needs `LLM_LIVE=true` and `DEMO_MODE` off. An injected `OPENAI_API_KEY` stays sandbox |
 | Dashboard and weekly report | Real UI. Sample data until Supabase Auth is connected |
 | Stripe | Test-mode client. No call is made without `sk_test_` keys. Live keys are refused |
+| HubSpot and Zoho | Coming soon. OAuth, encrypted tokens, and the sync queue stay in sandbox unless `CRM_LIVE=true` and demo mode is off |
 | Tenant isolation | SQL migration plus a PGlite test that denies cross-tenant access |
 
 ## Tests and deploy
@@ -49,6 +50,7 @@ Netlify: `netlify.toml` uses the Next.js plugin. Set environment variables in th
 - [Security](docs/SECURITY.md)
 - [Compliance](docs/COMPLIANCE.md) — TCPA, per-client A2P 10DLC, CTIA, CAN-SPAM
 - [Operations](docs/OPERATIONS.md) — accounts, webhooks, cron
+- [Integrations](docs/INTEGRATIONS.md) — HubSpot and Zoho, coming soon
 - [Roadmap](docs/ROADMAP.md) — Jobber, then Housecall Pro
 - [Status](docs/STATUS.md) — done, blockers, costs, next actions
 

@@ -1,12 +1,37 @@
 import Link from "next/link";
-import { integrationStatus } from "@/lib/integrations/status";
+import { CrmSettings, type CrmLogRow } from "@/components/portal/CrmSettings";
+import { crmLiveEnabled } from "@/lib/crm/mode";
+import { integrationStatus, supabaseConfigured } from "@/lib/integrations/status";
 import { getPortalModel } from "@/lib/portal/load";
 import { StatusChip } from "@/components/portal/StatusChip";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+
+async function loadCrmLogs(): Promise<CrmLogRow[]> {
+  if (!supabaseConfigured()) return [];
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return [];
+  const result = await supabase
+    .from("crm_sync_log")
+    .select("id, provider, action, status, attempt, detail, created_at")
+    .order("created_at", { ascending: false })
+    .limit(20);
+  if (result.error || !result.data) return [];
+  return result.data.map((row) => ({
+    id: String(row.id),
+    provider: String(row.provider),
+    action: String(row.action),
+    status: String(row.status),
+    attempt: Number(row.attempt),
+    detail: String(row.detail),
+    createdAt: String(row.created_at),
+  }));
+}
 
 export default async function SettingsPage() {
   const { workspace } = await getPortalModel();
   const tenant = workspace.tenant;
   const integrations = integrationStatus();
+  const crmLogs = await loadCrmLogs();
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       <section className="rounded-3xl bg-cream p-5">
@@ -50,9 +75,10 @@ export default async function SettingsPage() {
           ))}
         </ul>
         <p className="mt-4 text-sm leading-relaxed text-ink/70">
-          Sandbox means the credential is absent and the product will not pretend a live send, charge, or calendar write happened. Refused means a live Stripe secret was present and blocked.
+          Sandbox means the credential is absent and the product will not pretend a live send, charge, or calendar write happened. Refused means a live Stripe secret was present and blocked. CRM stays on the sandbox label until CRM sync is turned on.
         </p>
       </section>
+      <CrmSettings live={crmLiveEnabled()} logs={crmLogs} />
     </div>
   );
 }

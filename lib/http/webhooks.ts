@@ -9,6 +9,7 @@ import { cronAuthorized, sandboxWebhookAllowed } from "@/lib/integrations/status
 import { stripeMode, validStripeSignature } from "@/lib/integrations/stripe";
 import { twilioConfigured, validTwilioSignature } from "@/lib/integrations/twilio";
 import { buildWeeklyMetrics, startOfWeek } from "@/lib/reports/weekly";
+import { noteCrmSync } from "@/lib/crm/sync";
 import { deliveryForTenant, getStore } from "@/lib/store/index";
 import type { LeadStore } from "@/lib/store/types";
 
@@ -78,6 +79,7 @@ export async function handleVoiceWebhook(request: Request, store?: LeadStore): P
   const result = await handleMissedCall(workspace, { from }, runtimeFor(workspace));
   await deliverEffects(result.effects, workspace.tenant.smsFromNumber);
   await resolved.save(result.workspace);
+  await noteCrmSync(result.workspace);
   return xml(`${workspace.tenant.name} missed your call. We will text you about this call. You can reply STOP to opt out.`);
 }
 
@@ -95,6 +97,7 @@ export async function handleSmsWebhook(request: Request, store?: LeadStore): Pro
   const result = await handleInbound(workspace, { from, body }, runtimeFor(workspace));
   await deliverEffects(result.effects, workspace.tenant.smsFromNumber);
   await resolved.save(result.workspace);
+  await noteCrmSync(result.workspace);
   return emptyTwiml();
 }
 
