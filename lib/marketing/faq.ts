@@ -1,3 +1,5 @@
+import { foundingPilotPlainText } from "@/lib/marketing/trust";
+
 export const FAQS = [
   {
     q: "Who gets a text?",
@@ -33,7 +35,7 @@ export const FAQS = [
   },
   {
     q: "What is the founding pilot?",
-    a: "The first 5 HVAC shops can take a published plan with the first month free, the $99 setup fee waived, and that plan’s monthly price locked while they stay on it. We ask for honest feedback. A review or case study is optional, only if the shop is happy, and is not required for the discount.",
+    a: foundingPilotPlainText(),
   },
   {
     q: "How do I cancel?",

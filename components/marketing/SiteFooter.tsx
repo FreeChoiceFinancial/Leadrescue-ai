@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BRAND_LINE } from "@/lib/brand";
 
 export function SiteFooter() {
   return (
@@ -9,6 +10,7 @@ export function SiteFooter() {
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-cream/75">
             Missed-call recovery for owner-operated HVAC companies. Month to month, with the price on the page.
           </p>
+          <p className="mt-3 text-sm text-cream/80">{BRAND_LINE}</p>
         </div>
         <div className="text-sm">
           <p className="font-semibold text-cream/60">Product</p>

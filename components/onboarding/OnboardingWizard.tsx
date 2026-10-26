@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { FOUNDING_PILOT } from "@/lib/marketing/trust";
 
 const STEPS = ["Business", "Hours", "Alerts", "Review"];
 
@@ -83,7 +84,7 @@ export function OnboardingWizard({ configured }: { configured: boolean }) {
         <p className="mt-3 text-sm text-ink/70">Sandbox onboarding. Nothing is written to Supabase.</p>
       ) : null}
       {foundingPilot ? (
-        <p className="mt-3 text-sm text-ink/70">Founding pilot flag is on for this signup. A review is not required.</p>
+        <p className="mt-3 text-sm text-ink/70">{FOUNDING_PILOT.flagNote}</p>
       ) : null}
       <div className="mt-5 space-y-4">
         {step === 0 ? (
